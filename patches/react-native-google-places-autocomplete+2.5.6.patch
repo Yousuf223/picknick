@@ -1,0 +1,14 @@
+diff --git a/node_modules/react-native-google-places-autocomplete/GooglePlacesAutocomplete.js b/node_modules/react-native-google-places-autocomplete/GooglePlacesAutocomplete.js
+index 99a2a13..b55a739 100644
+--- a/node_modules/react-native-google-places-autocomplete/GooglePlacesAutocomplete.js
++++ b/node_modules/react-native-google-places-autocomplete/GooglePlacesAutocomplete.js
+@@ -354,7 +354,9 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
+ 
+       // sending predefinedPlace as details for predefined places
+       props.onPress(predefinedPlace, predefinedPlace);
++      
+     }
++    setListViewDisplayed(false)
+   };
+ 
+   const _enableRowLoader = (rowData) => {
