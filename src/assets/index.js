@@ -1,6 +1,6 @@
 export const appLogos = {
   // appIcon: require('../assets/image/notif_icon_outline.png'),
-  appLogo: require('../assets/image/appLogo.png'),
+  appLogo: require('../assets/image/appLogo.jpeg'),
 };
 
 export const appImages = {

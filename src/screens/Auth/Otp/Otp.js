@@ -20,14 +20,14 @@ import { otpVerify, resendOTP } from '../../../redux/actions/authAction';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Otp = ({ navigation, route }) => {
-  const email = useSelector(state => state?.authReducer?.email); // Get email from Redux state
+  const email = useSelector(state => state?.authReducer?.email); 
   const dispatch = useDispatch();
   const params = route.params?.data
   useEffect(() => {
-    setFocusIndex(params.otp)
+    setFocusIndex(params?.otp)
   }, [])
   let timer;
-  const [code, setCode] = useState(''); // New state for combined OTP code
+  const [code, setCode] = useState('');
   const [timerCode, setTimerCode] = useState(60);
   const [resend, setResend] = useState(false);
   const [resendOtpActive, setResendOtpActive] = useState(false);
@@ -53,7 +53,7 @@ const Otp = ({ navigation, route }) => {
 
     const otpCode = otp.join('');
     if (otpCode.length === otp.length) {
-      if (params.email) {
+      if (params?.email) {
         const payload = {
           role: params.role,
           email: params.email,
