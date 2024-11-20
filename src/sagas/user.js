@@ -5,6 +5,7 @@ import {
   saveTokenForLoginUser,
   logoutUser,
   loginCurrentUser,
+  setOtpData,
 } from '../redux/actions/authAction';
 import { loaderStart, loaderStop, removeDataForLogoutUser, } from '../redux/actions/appAction';
 import API_URL, {
@@ -26,7 +27,6 @@ import API_URL, {
 import ApiSauce from '../services/ApiSauce';
 import Util from '../utils/Utils';
 import NavService from '../helpers/NavService';
-
 
 function* login() {
   while (true) {
@@ -93,6 +93,8 @@ function* signUp() {
             role:payload.role,
             otp:response.data
           }
+        
+          yield put(setOtpData(paramData));
           NavService.navigate('Otp', {
             data: paramData
           });

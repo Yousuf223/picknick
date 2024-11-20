@@ -4,7 +4,7 @@ import ActionTypes, {
   USERLOGINTOKEN,
   CURRENTLOGINUSERINFO,
   SAVEEMAILFORUSER,
-  VERIFY_POPUP,SET_ROLE
+  VERIFY_POPUP,SET_ROLE,SET_OTP_DATA
 } from '../../constants';
 import store from '../../index';
 
@@ -20,6 +20,12 @@ export function loginUser(payload) {
 export function setRole(payload) {
   return {
     type: SET_ROLE,
+    payload,
+  };
+}
+export function setOtpData(payload) {
+  return {
+    type: SET_OTP_DATA,
     payload,
   };
 }

@@ -7,7 +7,7 @@ import {
   USERLOGOUT,
   VERIFY_POPUP,
   SAVEEMAILFORUSER,
-  SET_ROLE,
+  SET_ROLE,SET_OTP_DATA
 } from '../../constants';
 
 const INITIAL_STATE = {
@@ -18,6 +18,7 @@ const INITIAL_STATE = {
   verificationPopUp: false,
   email: null,
   role: '',
+  otpData:null
 };
 
 export default (states = INITIAL_STATE, action) => {
@@ -42,6 +43,11 @@ export default (states = INITIAL_STATE, action) => {
         ...states,
         role: action.payload,
       };
+      case SET_OTP_DATA:
+        return {
+          ...states,
+          otpData: action.payload,
+        };
     case USERLOGINDATA:
       return {
         ...states,

@@ -10,6 +10,7 @@ export const ERRMSG = 'ERRMSG';
 export const SEARCHEDREST = 'SEARCHEDREST';
 export const VERIFY_POPUP = 'VERIFY_POPUP';
 export const SAVEEMAILFORUSER = 'SAVEEMAILFORUSER';
+export const SET_OTP_DATA = 'SET_OTP_DATA';
 const REQUEST = 'REQUEST';
 const SUCCESS = 'SUCCESS';
 const CANCEL = 'CANCEL';
