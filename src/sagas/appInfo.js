@@ -12,19 +12,21 @@ import API_URL, {
   ACCEPT_REJECT_REQUEST,
   FRIEND_LIST,
   MY_POST,
-  GET_PROFILE,
-  LIKES_LIST,
   DELETE_COMMENT,
   GET_TERMSCONDITION,
   DELETE_POST,
-  PROFILE_DETAILS,
   GET_PRIVACY,
   GET_ABOUT,
   GET_ALL_LEVELS_BY_ID,
   GET_NOTIFICATION_ONOFF,
-  GET_ALL_LEVELS,
   UPLOAD_image,GET_NOTIFICATION,
   CREATE_HEEDBACK,
+  GET_SERVICE,
+  SERVICE_DETAIL,
+  LIKE_SERVICE,
+  LIKES_LIST,
+  CREATE_BOOKING,
+  GET_BOOKINGS,
 } from '../config/WebService';
 import ApiSauce from '../services/ApiSauce';
 import NavService from '../helpers/NavService';
@@ -64,16 +66,16 @@ function* getEventList() {
     }
   }
 }
-function* getAllLevels() {
+function* getServices() {
   while (true) {
-    const {params, responseCallback} = yield take(
-      ActionTypes.GET_ALL_LEVELS.REQUEST,
+    const { responseCallback} = yield take(
+      ActionTypes.GET_SERVICE.REQUEST,
     );
     yield put(loaderStart());
     try {
       const response = yield call(
         callRequest,
-        GET_ALL_LEVELS,
+        GET_SERVICE,
         null,
         '',
         {},
@@ -81,7 +83,7 @@ function* getAllLevels() {
       );
       yield put(loaderStop());
       if (response) {
-        console.log('----responseresponse', response?.data);
+        console.log('----responseresponse00000', response?.data?.data);
         if (responseCallback) {
           if (response?.data?.length > 0) {
             responseCallback(response?.data);
@@ -94,12 +96,50 @@ function* getAllLevels() {
       }
     } catch (error) {
       responseCallback([]);
-      console.log('errorofgetpostlist', error?.error);
+      console.log('errorofgetpostlist', error);
       // Util.DialogAlert(error?.message);
       yield put(loaderStop());
     }
   }
 }
+
+function* likeList() {
+  while (true) {
+    const { responseCallback} = yield take(
+      ActionTypes.LIKES_LIST.REQUEST,
+    );
+    yield put(loaderStart());
+    try {
+      const response = yield call(
+        callRequest,
+        LIKES_LIST,
+        null,
+        '',
+        {},
+        ApiSauce,
+      );
+      yield put(loaderStop());
+      if (response) {
+        console.log('----responseresponse00000', response?.data?.data);
+        if (responseCallback) {
+          if (response?.data?.length > 0) {
+            responseCallback(response?.data);
+          } else {
+            responseCallback([]);
+          }
+        }
+      } else {
+        console.log('errrorr-logged');
+      }
+    } catch (error) {
+      responseCallback([]);
+      console.log('errorofgetpostlist', error);
+      // Util.DialogAlert(error?.message);
+      yield put(loaderStop());
+    }
+  }
+}
+
 function* getNotification() {
   while (true) {
     const {params, responseCallback} = yield take(
@@ -137,19 +177,19 @@ function* getNotification() {
     }
   }
 }
-function* getProfile() {
+function* getServicesDetail() {
   while (true) {
     const {params, responseCallback} = yield take(
-      ActionTypes.GET_PROFILE.REQUEST,
+      ActionTypes.SERVICE_DETAIL.REQUEST,
     );
     yield put(loaderStart());
     try {
       const response = yield call(
         callRequest,
-        GET_PROFILE,
-        params,
+        SERVICE_DETAIL,
+        null,
         '',
-        {},
+        String(params),
         ApiSauce,
       );
       yield put(loaderStop());
@@ -328,7 +368,7 @@ function* receivedRequest() {
 function* acceptRejectRequest() {
   while (true) {
     const {params, responseCallback} = yield take(
-      ActionTypes.ACCEPT_REJECT_REQUEST.REQUEST,
+      ActionTypes.ACCEPT_REQUEST.REQUEST,
     );
     yield put(loaderStart());
     try {
@@ -341,17 +381,18 @@ function* acceptRejectRequest() {
         ApiSauce,
       );
       yield put(loaderStop());
-      if (response.status === 1) {
+      if (response) {
         console.log('responseofacceptrejectrequest', response);
         if (responseCallback) {
-          responseCallback(true);
+          Util.DialogAlert(response?.message);
+          responseCallback(response);
         }
       } else {
         console.log('errrorr-logged');
       }
     } catch (error) {
       console.log('errorofacceptrejectrequest', error);
-      // Util.DialogAlert(error?.message);
+      Util.DialogAlert(error?.message);
       yield put(loaderStop());
     }
   }
@@ -417,24 +458,24 @@ function* myPost() {
   }
 }
 
-function* listLikes() {
+function* likeService() {
   while (true) {
     const {params, responseCallback} = yield take(
-      ActionTypes.LIKES_LIST.REQUEST,
+      ActionTypes.LIKE_SERVICE.REQUEST,
     );
     yield put(loaderStart());
     try {
       const response = yield call(
         callRequest,
-        LIKES_LIST,
-        null,
+        LIKE_SERVICE,
+        params,
         '',
-        params?.post_id,
+        {},
         ApiSauce,
       );
       yield put(loaderStop());
-      if (response.status === 1) {
-        console.log('responseoflikeslist', response);
+      if (response) {
+        console.log('likeServicelikeServicelikeService', response);
         if (responseCallback) {
           responseCallback(response?.data);
         }
@@ -442,109 +483,16 @@ function* listLikes() {
         console.log('errrorr-logged');
       }
     } catch (error) {
-      console.log('erroroflikeslist', error);
+      console.log('likeServicelikeServicelikeService', error);
       // Util.DialogAlert(error?.message);
       yield put(loaderStop());
     }
   }
 }
 
-function* deleteComment() {
-  while (true) {
-    const {params, responseCallback} = yield take(
-      ActionTypes.DELETE_COMMENT.REQUEST,
-    );
-    yield put(loaderStart());
-    try {
-      const response = yield call(
-        callRequest,
-        DELETE_COMMENT,
-        null,
-        '',
-        params?.comment_id,
-        ApiSauce,
-      );
-      yield put(loaderStop());
-      if (response.status === 1) {
-        console.log('responseofcommentList', response);
-        if (responseCallback) {
-          responseCallback(response?.data);
-        }
-      } else {
-        console.log('errrorr-logged');
-      }
-    } catch (error) {
-      console.log('errorofcommentList', error);
-      // Util.DialogAlert(error?.message);
-      yield put(loaderStop());
-    }
-  }
-}
-function* deletePost() {
-  while (true) {
-    const {params, responseCallback} = yield take(
-      ActionTypes.DELETE_POST.REQUEST,
-    );
-    console.log('paramsindeletepost', params);
-    yield put(loaderStart());
-    try {
-      const response = yield call(
-        callRequest,
-        DELETE_POST,
-        null,
-        '',
-        params?.post_id,
-        ApiSauce,
-      );
-      yield put(loaderStop());
-      if (response.status === 1) {
-        console.log('responseiofdeletepost', response);
-        if (responseCallback) {
-          responseCallback(true);
-        }
-        Util.DialogAlert(response.message, 'success');
-      } else {
-        console.log('errrorr-logged');
-      }
-    } catch (error) {
-      console.log('errorofdeletepost', error);
-      Util.DialogAlert(error?.message);
-      yield put(loaderStop());
-    }
-  }
-}
 
-function* profileDetails() {
-  while (true) {
-    const {params, responseCallback} = yield take(
-      ActionTypes.PROFILE_DETAILS.REQUEST,
-    );
-    yield put(loaderStart());
-    try {
-      const response = yield call(
-        callRequest,
-        PROFILE_DETAILS,
-        null,
-        '',
-        params?.user_id,
-        ApiSauce,
-      );
-      yield put(loaderStop());
-      if (response.status === 1) {
-        console.log('responseofprofiledetails', response);
-        if (responseCallback) {
-          responseCallback(response?.data);
-        }
-      } else {
-        console.log('errrorr-logged');
-      }
-    } catch (error) {
-      console.log('errorofprofiledetails', error);
-      // Util.DialogAlert(error?.message);
-      yield put(loaderStop());
-    }
-  }
-}
+
+
 function* getTermsAndCondition() {
   while (true) {
     const {params, responseCallback} = yield take(
@@ -619,16 +567,16 @@ function* getPrivacy() {
   }
 }
 
-function* getAbout() {
+function* getBooking() {
   while (true) {
-    const {params, responseCallback} = yield take(
-      ActionTypes.GET_ABOUT.REQUEST,
+    const {responseCallback} = yield take(
+      ActionTypes.GET_BOOKINGS.REQUEST,
     );
     yield put(loaderStart());
     try {
       const response = yield call(
         callRequest,
-        GET_ABOUT,
+        GET_BOOKINGS,
         null,
         '',
         {},
@@ -636,9 +584,9 @@ function* getAbout() {
       );
       yield put(loaderStop());
       if (response) {
-        console.log('----responseresponse', response?.data);
+        console.log('Bookings data', response);
         if (responseCallback) {
-          if (response?.data) {
+          if (response) {
             responseCallback(response?.data);
           } else {
             responseCallback([]);
@@ -655,6 +603,8 @@ function* getAbout() {
     }
   }
 }
+
+
 
 function* getNotificationOnOff() {
   while (true) {
@@ -724,6 +674,39 @@ function* uploadImage() {
   }
 }
 
+function* createBooking() {
+  while (true) {
+    const {params, responseCallback} = yield take(
+      ActionTypes.CREATE_BOOKING.REQUEST,
+    );
+    yield put(loaderStart());
+    try {
+      const response = yield call(
+        callRequest,
+        CREATE_BOOKING,
+        params,
+        '',
+        {},
+        ApiSauce,
+      );
+      yield put(loaderStop());
+      console.log('responseresponse', response);
+      if (response) {
+             Util.DialogAlert(response.message, 'success');
+        if (responseCallback) {
+          responseCallback(response);
+        }
+      } else {
+        console.log('errrorr-logged');
+      }
+    } catch (error) {
+      console.log('error?.responseerror?.response', error?.response);
+           Util.DialogAlert(error?.message);
+      yield put(loaderStop());
+    }
+  }
+}
+
 function* createHeedback() {
   while (true) {
     const {params, responseCallback} = yield take(
@@ -759,8 +742,8 @@ function* createHeedback() {
 
 export default function* root() {
   yield fork(getEventList);
-  yield fork(getAllLevels);
-  yield fork(getProfile);
+  yield fork(getServices);
+  yield fork(getServicesDetail);
   yield fork(nearByUserList);
   yield fork(SendRequest);
   yield fork(SendRequestList);
@@ -768,16 +751,15 @@ export default function* root() {
   yield fork(acceptRejectRequest);
   yield fork(friendList);
   yield fork(myPost);
-  yield fork(listLikes);
-  yield fork(deleteComment);
-  yield fork(getAbout);
+  yield fork(likeService);
+  yield fork(likeList);
+  yield fork(getBooking);
   yield fork(getTermsAndCondition);
-  yield fork(deletePost);
-  yield fork(profileDetails);
   yield fork(getPrivacy);
   yield fork(getNotificationOnOff);
   yield fork(uploadImage);
   yield fork(createHeedback);
   yield fork(getAllLevelsById);
   yield fork(getNotification);
+  yield fork(createBooking)
 }

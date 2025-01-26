@@ -5,6 +5,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // Screens
 import UserAppStack from './drawer/drawer';
 import Home from '../../screens/Main/Coach/Home/Home';
+import Profile from '../../screens/Main/Coach/Profile/Proflie';
+import CreatePost from '../../screens/Main/Coach/CreatePost';
+import Bookings from '../../screens/Main/Coach/Bookings/Bookings';
 
 
 
@@ -24,6 +27,11 @@ const CoachNavigation = ({ initialRoute }) => {
       }}>
       <Stack.Screen name="UserAppStack" component={UserAppStack} />
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="CreatePost" component={CreatePost} />
+      <Stack.Screen name="Bookings" component={Bookings} />
+      
+      
     </Stack.Navigator>
   );
 };

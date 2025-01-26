@@ -50,16 +50,35 @@ export function createPost(params, responseCallback) {
     responseCallback,
   };
 }
-export function getEventList(params, responseCallback) {
+export function createBooking(params, responseCallback) {
   return {
-    type: ActionTypes.GET_LIST.REQUEST,
+    type: ActionTypes.CREATE_BOOKING.REQUEST,
     params,
     responseCallback,
   };
 }
-export function getAllLevels(params, responseCallback) {
+export function getEventList( responseCallback) {
   return {
-    type: ActionTypes.GET_ALL_LEVELS.REQUEST,
+    type: ActionTypes.GET_LIST.REQUEST,
+    responseCallback,
+  };
+}
+export function getServices( responseCallback) {
+  return {
+    type: ActionTypes.GET_SERVICE.REQUEST,
+    responseCallback,
+  };
+}
+export function getServicesDetail(params, responseCallback) {
+  return {
+    type: ActionTypes.SERVICE_DETAIL.REQUEST,
+    params,
+    responseCallback,
+  };
+}
+export function likeService(params, responseCallback) {
+  return {
+    type: ActionTypes.LIKE_SERVICE.REQUEST,
     params,
     responseCallback,
   };
@@ -141,10 +160,9 @@ export function like(params, responseCallback) {
     responseCallback,
   };
 }
-export function listLikes(params, responseCallback) {
+export function listLikes( responseCallback) {
   return {
     type: ActionTypes.LIKES_LIST.REQUEST,
-    params,
     responseCallback,
   };
 }
@@ -183,16 +201,9 @@ export function profileDetails(params, responseCallback) {
     responseCallback,
   };
 }
-export function unFriend(params, responseCallback) {
+export function acceptReject(params, responseCallback) {
   return {
-    type: ActionTypes.UNFRIEND.REQUEST,
-    params,
-    responseCallback,
-  };
-}
-export function editComment(params, responseCallback) {
-  return {
-    type: ActionTypes.EDIT_COMMENT.REQUEST,
+    type: ActionTypes.ACCEPT_REQUEST.REQUEST,
     params,
     responseCallback,
   };
@@ -244,10 +255,9 @@ export function getNotificationOnOff(params, responseCallback) {
   };
 }
 
-export function getAbout(params, responseCallback) {
+export function getBookings(responseCallback) {
   return {
-    type: ActionTypes.GET_ABOUT.REQUEST,
-    params,
+    type: ActionTypes.GET_BOOKINGS.REQUEST,
     responseCallback,
   };
 }

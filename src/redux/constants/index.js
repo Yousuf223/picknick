@@ -55,14 +55,15 @@ export const RESEND_PASSWORD = createRequestTypes('RESEND_PASSWORD');
 export const GET_ALL_STATES = createRequestTypes('GET_ALL_STATES');
 
 export const ADD_PROPERTIES = createRequestTypes('ADD_PROPERTIES');
-export const GET_ALL_LEVELS = createRequestTypes('GET_ALL_LEVELS');
+export const GET_SERVICE = createRequestTypes('GET_SERVICE');
 export const GET_ALL_LEVELS_BY_ID = createRequestTypes('GET_ALL_LEVELS_BY_ID');
 export const GET_ALL_USERS = createRequestTypes('GET_ALL_USERS');
-export const ADD_EVENT = createRequestTypes('ADD_EVENT');
+export const LIKE_SERVICE = createRequestTypes('LIKE_SERVICE');
 export const GET_EVENT = createRequestTypes('GET_EVENT');
 export const FOLLOW_USER = createRequestTypes('FOLLOW_USER');
 export const GET_ALL_STORE = createRequestTypes('GET_ALL_STORE');
 export const CREATE_TRIP = createRequestTypes('CREATE_TRIP');
+export const CREATE_BOOKING = createRequestTypes('CREATE_BOOKING');
 export const GET_FOLLOWERS_REQUEST = createRequestTypes('GET_FOLLOWERS_REQUEST');
 export const ACCEPT_REQUEST = createRequestTypes('ACCEPT_REQUEST');
 export const NOTIFICATION_TOGGLE = createRequestTypes('NOTIFICATION_TOGGLE');
@@ -90,12 +91,13 @@ export const UNFRIEND = createRequestTypes('UNFRIEND');
 export const EDIT_COMMENT = createRequestTypes('EDIT_COMMENT');
 export const CHAT_LIST = createRequestTypes('CHAT_LIST');
 export const GET_PRIVACY = createRequestTypes('GET_PRIVACY');
-export const GET_ABOUT = createRequestTypes('GET_ABOUT');
+export const GET_BOOKINGS = createRequestTypes('GET_BOOKINGS');
 export const GET_TERMSCONDITION = createRequestTypes('GET_TERMSCONDITION');
 export const GET_NOTIFICATION_ONOFF = createRequestTypes('GET_NOTIFICATION_ONOFF');
 export const GET_NOTIFICATION = createRequestTypes('GET_NOTIFICATION');
 export const UPLOAD_IMAGE = createRequestTypes('UPLOAD_IMAGE')
 export const CREATE_HEEDBACK = createRequestTypes('CREATE_HEEDBACK')
+export const SERVICE_DETAIL = createRequestTypes('SERVICE_DETAIL')
 export default {
   LOADING_STATE,
   SOCIAL_SIGNUP_USER,
@@ -113,11 +115,12 @@ export default {
   RESEND_OTP,
   FORGOT_PASSWORD,
   RESEND_PASSWORD,
-  ADD_EVENT,
+  LIKE_SERVICE,
   GET_NOTIFICATION,
   GET_EVENT,
+  CREATE_BOOKING,
   GET_ALL_USERS, FOLLOW_USER,
-  GET_ALL_LEVELS, GET_ALL_STORE, CREATE_TRIP, GET_FOLLOWERS_REQUEST,
+  GET_SERVICE, GET_ALL_STORE, CREATE_TRIP, GET_FOLLOWERS_REQUEST,
   ACCEPT_REQUEST, NOTIFICATION_TOGGLE,
   REMOVE_REQUEST, GET_HOME_STORE,
   SOCIAL_LOGIN,
@@ -143,9 +146,10 @@ export default {
   CHAT_LIST,
   ADD_PROFILE_PICTURE,
   GET_TERMSCONDITION,
-  GET_ABOUT,
+  GET_BOOKINGS,
   GET_PRIVACY,
   GET_NOTIFICATION_ONOFF,
   UPLOAD_IMAGE,
-  CREATE_HEEDBACK  
+  CREATE_HEEDBACK  ,
+  SERVICE_DETAIL
 };

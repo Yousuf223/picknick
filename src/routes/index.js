@@ -19,43 +19,6 @@ import {
   addStoryData,
 } from '../redux/actions/appAction';
 
-// const requestLocationPermission = async () => {
-//   try {
-//     const granted = await PermissionsAndroid.request(
-//       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-//       PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
-//       {
-//         title: 'Lift Fitness',
-//         message: 'Lift Fitness App access to your location ',
-//         buttonNeutral: 'Ask Me Later',
-//         buttonNegative: 'Cancel',
-//         buttonPositive: 'OK',
-//       },
-//     );
-//     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-//       console.log('You can use the location');
-//       // showMessage({
-//       //   message: 'Success',
-//       //   description: 'Location Permission Accepted',
-//       //   type: 'success',
-//       // });
-//     } else {
-//       console.log('location permission denied');
-//       return;
-//       // showMessage({
-//       //   message: 'Error',
-//       //   description: 'Location Permission Denied',
-//       //   type: 'error',
-//       // });
-//     }
-//   } catch (err) {
-//     // showMessage({
-//     //   message: 'Error',
-//     //   description: err,
-//     //   type: 'error',
-//     // });
-//   }
-// };
 
 class MainNavigation extends Component {
   constructor(props) {

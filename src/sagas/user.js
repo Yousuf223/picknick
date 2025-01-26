@@ -43,7 +43,7 @@ function* login() {
       );
       yield put(loaderStop());
       if (response) {
-        console.log('login user', response);
+        console.log('login user', response?.data);
         if (response) {
           if (response?.data?.user.isProfileCompleted == false) {
             yield put(saveTokenForLoginUser(response?.token));
@@ -52,7 +52,7 @@ function* login() {
           } else {
             console.log('login response', response.data);
             yield put(saveTokenForLoginUser(response?.token));
-            yield put(loginUser(response?.data));
+            yield put(loginUser(response?.data?.user));
             Util.DialogAlert('Login Successfully', 'success');
           }
         }

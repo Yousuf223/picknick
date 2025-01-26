@@ -1,23 +1,50 @@
-import { StyleSheet } from 'react-native';
-import { colors, size, family } from '../../../../utils';
-import appStyles from '../../../appStyles';
+import { StyleSheet, Platform } from 'react-native';
+import { colors } from '../../../../utils'; // Assuming colors are defined in utils
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    width: '100%',
-  },
   dec: {
     height: 246,
-    width: '97%',
-    backgroundColor: colors.gray,
+    width: '90%',
+    backgroundColor: colors.lightGray1,
     alignSelf: 'center',
     paddingHorizontal: 12,
     borderRadius: 10,
     color: colors.white,
     marginVertical: 10,
     paddingTop: 12
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: colors.gray,
+    borderRadius: 8,
+    padding: 10,
+    marginVertical: 10,
+    fontSize: 16,
+    color: colors.black,
+    backgroundColor: colors.white,
+    height:54
+  },
+  imagePreview: {
+    width: 100,
+    height: 100,
+    borderRadius: 8,
+    marginRight: 10,
+    marginVertical: 10,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginVertical: 10,
+  },
+  rowIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icons: {
+    width: 24,
+    height: 24,
+    marginRight: 8,
   },
   row: {
     flexDirection: "row",
@@ -27,7 +54,9 @@ const styles = StyleSheet.create({
   },
   rowIcons: {
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
+    paddingHorizontal:10,
+    paddingTop:10
   },
   icons: {
     width: 24,
@@ -35,15 +64,14 @@ const styles = StyleSheet.create({
     resizeMode: "contain"
   },
   title: {
-    fontSize: size.tiny,
-    color: colors.lightGray1,
-    paddingLeft: 5
+    fontSize: 16,
+    color: colors.black,
   },
-  XPosi: {
-    position: 'absolute',
-    zIndex: 1000,
-    right: -7,
-    // bottom:20,
+  buttonStyle: {
+    backgroundColor: colors.primary,
+    padding: 15,
+    borderRadius: 8,
+    marginVertical: 20,
   },
   crossContainer: {
     backgroundColor: colors.primary,
@@ -60,47 +88,34 @@ const styles = StyleSheet.create({
     // paddingRight:20
     // right:0
 
-
   },
-
   cross: {
-    fontSize: size.xxxtiny,
     color: colors.white,
-    fontWeight: 'bold'
+    fontSize: 14,
   },
   videoStyle: {
-    width: 75,
-    height: 75,
-    // backgroundColor: colors.grey,
-    borderRadius: 10,
-    marginTop: 4,
-    marginLeft: 10,
-    // position: 'relative'
+    width: 100,
+    height: 100,
+    borderRadius: 8,
+    marginRight: 10,
   },
-
-  bottomBtnsView: {
-    ...appStyles.w100,
-    ...appStyles.alignCenter,
-    ...appStyles.justifySpaceBetween,
+  dec: {
+    borderWidth: 1,
+    borderColor: colors.black,
+    borderRadius: 8,
+    padding: 10,
+    marginVertical: 10,
+    fontSize: 16,
+    color: colors.black,
+    backgroundColor: colors.white,
+    height: 140,
+    width:'90%',
+    alignSelf:'center'
   },
-
-  bottomBtn: {
-    width: '47%',
-    height: 50,
-    borderRadius: 10,
-    marginLeft: 5,
-  },
-
-  btnTitle: {
-    ...appStyles.font14,
-    ...appStyles.family_Oswald_Regular,
-  },
-
-  flexRow: {
-    ...appStyles.directionRow,
-    ...appStyles.alignCenter,
-  },
-
+  buttonStyle:{
+    alignSelf:'center',
+    marginTop:20
+  }
 });
 
 export default styles;

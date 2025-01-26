@@ -2,8 +2,8 @@ import _ from 'lodash';
 import ApiSauce from '../services/ApiSauce';
 import store from '../redux';
 
-// export const BASE_URL = 'https://server.appsstaging.com:3017/api/v1/';
-export const BASE_URL = 'https://3239dgd1-8000.inc1.devtunnels.ms/api/v1/';
+// export const BASE_URL = 'https://sn6jm18m-8000.inc1.devtunnels.ms/api/v1/';
+export const BASE_URL = 'https://sn6jm18m-4000.inc1.devtunnels.ms/api/v1/';
 export const ASSETS_URL = 'https://3239dgd1-8000.inc1.devtunnels.ms/';
 export const WEB_SOCKET_URL = 'https://host2.appsstaging.com:3018/';
 export const GOOGLE_MAPS_URL =
@@ -121,12 +121,17 @@ export const CREATE_POST = {
   type: REQUEST_TYPE.POST,
 };
 export const GET_LIST = {
-  route: 'events',
+  route: 'vendor/listings/all',
   access_token_required: true,
   type: REQUEST_TYPE.GET,
 };
-export const GET_ALL_LEVELS = {
-  route: 'levels',
+export const GET_SERVICE = {
+  route: 'user/home/listings',
+  access_token_required: true,
+  type: REQUEST_TYPE.GET,
+};
+export const LIKES_LIST = {
+  route: 'user/home/wish-list',
   access_token_required: true,
   type: REQUEST_TYPE.GET,
 };
@@ -145,8 +150,8 @@ export const GET_PRIVACY = {
   access_token_required: true,
   type: REQUEST_TYPE.GET,
 };
-export const GET_ABOUT = {
-  route: 'documentations/about-app',
+export const GET_BOOKINGS = {
+  route: 'vendor/bookings',
   access_token_required: true,
   type: REQUEST_TYPE.GET,
 };
@@ -155,8 +160,8 @@ export const GET_NOTIFICATION_ONOFF = {
   access_token_required: true,
   type: REQUEST_TYPE.GET,
 };
-export const GET_PROFILE = {
-  route: 'users/me',
+export const SERVICE_DETAIL = {
+  route: 'user/home/listing-detail',
   access_token_required: true,
   type: REQUEST_TYPE.GET,
 };
@@ -185,6 +190,11 @@ export const CREATE_HEEDBACK = {
   access_token_required: true,
   type: REQUEST_TYPE.POST,
 };
+export const CREATE_BOOKING = {
+  route: 'user/home/create-booking',
+  access_token_required: true,
+  type: REQUEST_TYPE.POST,
+};
 export const SENT_REQUEST_LIST = {
   route: 'sent-request-list',
   access_token_required: true,
@@ -196,9 +206,9 @@ export const RECEIVED_REQUEST = {
   type: REQUEST_TYPE.GET,
 };
 export const ACCEPT_REJECT_REQUEST = {
-  route: 'accept-reject-request',
+  route: 'vendor/bookings/accept-reject',
   access_token_required: true,
-  type: REQUEST_TYPE.POST,
+  type: REQUEST_TYPE.PATCH,
 };
 export const FRIEND_LIST = {
   route: 'friend-list',
@@ -215,10 +225,10 @@ export const API_LIKE = {
   access_token_required: true,
   type: REQUEST_TYPE.GET,
 };
-export const LIKES_LIST = {
-  route: 'likes-list',
+export const LIKE_SERVICE = {
+  route: 'user/home/fav-unfav',
   access_token_required: true,
-  type: REQUEST_TYPE.GET,
+  type: REQUEST_TYPE.PATCH,
 };
 export const COMMENT = {
   route: 'comment',
@@ -385,5 +395,4 @@ export default {
   LOGOUT,
   RESEND_PASSWORD,
   FORGOT_PASSWORD,
-  LIKES_LIST,
 };

@@ -4,6 +4,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import UserAppStack from './drawer/drawer';
 import Home from '../../screens/Main/user/Home/Home';
+import Profile from '../../screens/Main/user/Profile/Profie';
+import ServiceDetail from '../../screens/Main/user/ServiceDetail/businessDetail';
+import Favorite from '../../screens/Main/user/favorite/favorite';
+import MyBookings from '../../screens/Main/user/MyBookings/MyBookings';
+
 
 
 
@@ -23,6 +28,11 @@ const UserNavigation = ({ initialRoute }) => {
       }}>
       <Stack.Screen name="UserAppStack" component={UserAppStack} />
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="ServiceDetail" component={ServiceDetail} />
+      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Favorite" component={Favorite} />
+      <Stack.Screen name="MyBookings" component={MyBookings} />
+      
     </Stack.Navigator>
   );
 };

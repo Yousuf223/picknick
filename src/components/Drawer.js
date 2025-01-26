@@ -24,9 +24,9 @@ import LinearGradient from 'react-native-linear-gradient';
 const userMenuItems = [
   {
     icon: appIcons.event,
-    title: 'Recommended Events',
-    nav: 'AllEvents',
-    screen: 'AllEvents',
+    title: 'My Bookings',
+    nav: 'MyBookings',
+    screen: 'MyBookings',
   },
   {
     icon: appIcons.setting,
@@ -42,6 +42,26 @@ const userMenuItems = [
   }
 ];
 
+const vendorMenuItems = [
+  {
+    icon: appIcons.event,
+    title: 'Bookings',
+    nav: 'Bookings',
+    screen: 'Bookings',
+  },
+  {
+    icon: appIcons.setting,
+    title: 'Settings',
+    nav: 'Settings',
+    screenName: 'Settings',
+  },
+  {
+    icon: appIcons.help,
+    title: 'Help & Feedback',
+    nav: 'HelpAndFeedback',
+    screenName: 'HelpAndFeedback',
+  }
+];
 class Drawer extends Component {
   constructor(props) {
     super(props);
@@ -53,10 +73,9 @@ class Drawer extends Component {
 
   render() {
     const { modalVisible, profileImage } = this.state;
-    const role = this.props?.user?.role;
-    const { user } = this?.props;
-
-
+    const role = this.props?.role;
+    const  user  = this?.props?.user;
+    console.log('useruser',user)
     const RenderItem = ({ item, index }) => {
       const { title, icon, nav, screenName, screen } = item;
       return (
@@ -105,7 +124,7 @@ class Drawer extends Component {
                 width: 20,
                 height: 20,
                 resizeMode: 'contain',
-                // tintColor: colors.white,
+                tintColor: colors.white,
               }}
             />
           </View>
@@ -174,10 +193,10 @@ class Drawer extends Component {
               size={90}
               innerAsset={profileImage == null ? true : false}
               imageUri={
-                profileImage == null && user?.profilePicture == null
+                profileImage == null && user?.profileImage == null
                   ? appIcons.userPlaceholder
-                  : user?.profilePicture !== '' && profileImage == null
-                    ? { uri: user?.profilePicture }
+                  : user?.profileImage !== '' && profileImage == null
+                    ? { uri: user?.profileImage }
                     : profileImage?.path
               }
               darwerImg
@@ -208,7 +227,7 @@ class Drawer extends Component {
             <Text
               numberOfLines={1}
               style={{
-                color: colors.secondary,
+                color: colors.white,
                 fontSize: size.xsmall,
                 // fontFamily: family.Oswald_Regular,
                 marginTop: 3,
@@ -240,7 +259,7 @@ class Drawer extends Component {
           <FlatList
             bounces={false}
             showsVerticalScrollIndicator={false}
-            data={userMenuItems}
+            data={role == 'User'? userMenuItems: vendorMenuItems}
             style={{
               height: '100%',
               paddingHorizontal: 20,
@@ -281,9 +300,10 @@ class Drawer extends Component {
   }
 }
 
-function mapStateToProps({ authReducer: { user } }) {
+function mapStateToProps({ authReducer: { user,role } }) {
   return {
     user: user,
+    role:role
   };
 }
 

@@ -10,6 +10,11 @@ const styles = StyleSheet.create({
   },
   containerStyle:{
     width:'100%'
+  },
+  title:{
+    paddingVertical:10,
+    color:colors.black,
+    fontWeight:'600'
   }
 });
 export default styles;

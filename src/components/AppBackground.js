@@ -75,7 +75,7 @@ function AppBackground({
                   width: 20,
                   height: 20,
                   resizeMode: 'contain',
-                  // tintColor: colors.white,
+                  tintColor: colors.black,
                 }}
               />
             )}
@@ -86,7 +86,7 @@ function AppBackground({
                   width: 25,
                   height: 25,
                   resizeMode: 'contain',
-                  tintColor: colors.white,
+                  tintColor: colors.black,
                 }}
               />
             )}
@@ -97,8 +97,8 @@ function AppBackground({
                   width: 22,
                   height: 22,
                   resizeMode: 'contain',
-                  left: 5
-                  // tintColor: colors.white,
+                  left: 5,
+                  tintColor: colors.black,
                 }}
               />
             )}
@@ -109,7 +109,7 @@ function AppBackground({
 
             {title && <Text
               style={{
-                color: colors.white,
+                color: colors.black,
                 fontSize: size.normal,
                 marginTop: Platform.OS === 'ios' ? 10 : 0,
               
@@ -138,7 +138,7 @@ function AppBackground({
                   width: 23,
                   height: 23,
                   resizeMode: 'contain',
-                  // tintColor: colors.yellow
+                  tintColor: colors.black
                 }}
               />
             </TouchableOpacity>
@@ -187,7 +187,7 @@ function AppBackground({
                   width: 12,
                   height: 12,
                   resizeMode: 'contain',
-                  tintColor: colors.white
+                  tintColor: colors.black
                   // transform: [{ rotateX: '45deg' }, { rotateZ: '90deg' }],
                 }}
               />

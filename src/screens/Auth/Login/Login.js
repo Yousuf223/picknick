@@ -52,7 +52,9 @@ const Login = ({loginCurrentUser, location, navigation}) => {
       dispatch(loginCurrentUser(payload));
     }
   };
-
+  const now = new Date();
+  const offsetInMinutes = now.getTimezoneOffset();
+  console.log(offsetInMinutes)
   return (
     <CustomBackground showLogo={false} titleText={'Sign In'}>
       <View style={styles.container}>

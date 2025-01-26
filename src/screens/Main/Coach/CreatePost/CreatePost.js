@@ -1,307 +1,199 @@
-import React, {Component} from 'react';
+import React, { useState } from 'react';
 import {
   View,
-  Image,
   Text,
-  TouchableOpacity,
   TextInput,
+  TouchableOpacity,
   ScrollView,
   Platform,
+  Image,
+  FlatList,
 } from 'react-native';
-import {connect} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AppBackground from '../../../../components/AppBackground';
-import NavService from '../../../../helpers/NavService';
-import {appIcons, appImages} from '../../../../assets';
-import {colors} from '../../../../utils';
-import styles from './styles';
 import CustomButton from '../../../../components/CustomButton';
 import CustomImagePicker from '../../../../components/CustomImagePicker';
-import {
-  Image as ImageCompressor,
-  Video as VideoCompressor,
-} from 'react-native-compressor';
-import CustomVideoPicker from '../../../../components/CustomVideoPicker';
-import {Toast} from 'react-native-toast-message/lib/src/Toast';
-import {createPost} from '../../../../redux/actions/appAction';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import axios from 'axios';
+import styles from './styles';
+import { BASE_URL } from '../../../../config/WebService';
+import { loaderStart, loaderStop } from '../../../../redux/actions/appAction';
+import { colors } from '../../../../utils';
+import NavService from '../../../../helpers/NavService';
+import CustomTextInput from '../../../../components/CustomTextInput';
+import GooglePlaceAutocomplete from '../../../../components/GooglePlaceAutocomplete';
+import { Image as ImageCompressor, Video as VideoCompressor } from 'react-native-compressor';
+import { appIcons } from '../../../../assets';
+import CustomMultiSelect from '../../../../components/customMultipleSelect';
 
-class CreatePost extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      description: '',
-      image: [],
-      video: [],
-    };
-  }
+const CreatePost = () => {
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.authReducer.userToken);
 
-  onSubmit = () => {
-    const {description, image, video} = this.state;
-    const params = this.props.route.params;
-    console.log('Params-GroupName', params);
-    if (description == '' && image.length == 0 && video.length == 0) {
-      Toast.show({
-        text1: 'Please post something',
-        type: 'error',
-        visibilityTime: 3000,
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [selectedServices, setSelectedServices] = useState([]);
+  const [address, setAddress] = useState('');
+  const [longitude, setLongitude] = useState('32');
+  const [latitude, setLatitude] = useState('33');
+  const [price, setPrice] = useState('');
+  const [image, setImage] = useState([]);
+  console.log('selectedServicesselectedServices', selectedServices)
+  const serviceOptions = [
+    { id: '1', name: 'Parking Area' },
+    { id: '2', name: 'Swimming Pool' },
+    { id: '3', name: 'Free WiFi' },
+    { id: '4', name: 'Room Service' },
+    { id: '5', name: 'Gym' },
+  ];
+
+  const updateImageInGallery = async (path, mime, type) => {
+    let multipleImages = [];
+    if (Array.isArray(path)) {
+      const arr = path.map(async (item) => {
+        const result = await ImageCompressor.compress(item.path, {
+          maxHeight: 400,
+          maxWidth: 400,
+          quality: 1,
+        });
+        let imageObject = {
+          uri: result,
+          name: `image${Date.now()}${item.filename}.${item.mime.slice(item.mime.lastIndexOf('/') + 1)}`,
+          type: item.mime,
+          tempType: 'image',
+        };
+        multipleImages.push(imageObject);
       });
-    } else if (image.length > 10) {
-      Toast.show({
-        text1: 'Images cannot exceed from 10',
-        type: 'error',
-        visibilityTime: 3000,
-      });
+      await Promise.all(arr);
+      setImage((prevImage) => [...prevImage, ...multipleImages]);
     } else {
-      const payload = new FormData();
-      console.log('image-payloadd', image);
-      console.log('videooos-payloadd', video);
-      payload.append('description', description);
-      if (image.length > 0) {
-        image.map(item => {
-          delete item?.tempType;
-          payload.append('post_images', item);
-        });
-      }
-      if (video.length > 0) {
-        video.map(item => {
-          console.log('ItemInVideosssss', item);
-          delete item?.tempType;
-          payload.append('post_videos', item);
-        });
-      }
-
-      this?.props?.createPost(payload);
-      console.log('payload-of-create-post', payload);
-      setTimeout(() => {
-        NavService.navigate('BottomTabs', {name: 'Home'});
-      }, 3500);
-    }
-  };
-  onSubmitGroupPost = () => {
-    const {description, image, video} = this.state;
-    const params = this.props.route.params;
-    console.log('Params-GroupName', params);
-    if (description == '') {
-      Toast.show({
-        text1: 'Description field can`t be empty',
-        type: 'error',
-        visibilityTime: 3000,
-      });
-    } else if (image.length > 10) {
-      Toast.show({
-        text1: 'Images cannot exceed from 10',
-        type: 'error',
-        visibilityTime: 3000,
-      });
-    } else {
-      const payload = new FormData();
-      console.log('image-payloadd', image);
-      console.log('videooos-payloadd', video);
-      payload.append('description', description);
-      if (image.length > 0) {
-        image.map(item => {
-          delete item?.tempType;
-          payload.append('post_images', item);
-        });
-      }
-      if (video.length > 0) {
-        video.map(item => {
-          delete item?.tempType;
-          payload.append('post_videos', item);
-        });
-      }
-      payload.append('is_group_post', 1);
-      payload.append('group_id', params?.groupId);
-      this?.props?.createPost(payload);
-      console.log('payload-of-create-post', payload);
-      setTimeout(() => {
-        NavService.goBack();
-      }, 850);
-      // NavService.navigate('BottomTabs', { screen: 'Home' });
+      const imageObject = {
+        uri: path,
+        name: `image${Date.now()}.${mime.slice(mime.lastIndexOf('/') + 1)}`,
+        type: mime,
+        tempType: type,
+      };
+      setImage((prevImage) => [...prevImage, imageObject]);
     }
   };
 
-  render() {
-    const {description, image, video} = this.state;
-    const params = this.props.route.params;
-    console.log('Params-GroupName', params);
+  const onSubmit = () => {
+    // if (!name || !description || selectedServices.length > 0 || !address || !longitude || !latitude || !price) {
+    //   Toast.show({
+    //     text1: 'Please fill all fields.',
+    //     type: 'error',
+    //     visibilityTime: 3000,
+    //   });
+    //   return;
+    // }
 
-    const updateImageInGallery = async (path, mime, type) => {
-      console.log('path', path);
-      let multipleImages = [];
-      if (Array.isArray(path)) {
-        const arr = path?.map(async item => {
-          const result = await ImageCompressor.compress(item.path, {
-            maxHeight: 400,
-            maxWidth: 400,
-            quality: 1,
-          });
-          console.log('result', item);
-          let imageObject = {
-            uri: result,
-            name: `image${Date.now()}${item?.filename}.${item?.mime.slice(
-              item?.mime.lastIndexOf('/') + 1,
-            )}`,
-            type: item?.mime,
-            tempType: 'image',
-          };
-          multipleImages.push(imageObject);
+    dispatch(loaderStart());
+    const payload = new FormData();
+    payload.append('name', name);
+    payload.append('description', description);
+
+    payload.append('address', 'New York');
+    payload.append('longitude', longitude);
+    payload.append('latitude', latitude);
+    payload.append('price', price);
+    payload.append('services', JSON.stringify(selectedServices));
+
+    image.forEach((img) => {
+      payload.append('listingMedia', img);
+    });
+    console.log('payloadpayload', payload)
+    axios
+      .post(`${BASE_URL}vendor/listings`, payload, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        Toast.show({
+          text1: 'Post created successfully.',
+          type: 'success',
+          visibilityTime: 3000,
         });
-        await Promise.all(arr);
-        console.log('arr', arr);
-        const mergeImagesWithExistingGalleryAssets = [
-          ...image,
-          ...multipleImages,
-        ];
-        this.setState({image: mergeImagesWithExistingGalleryAssets});
-      } else {
-        const getExistingGalleryAssets = [...image];
-        const imageObject = {
-          uri: path,
-          name: `image${Date.now()}.${mime.slice(mime.lastIndexOf('/') + 1)}`,
-          type: mime,
-          tempType: type,
-        };
-        getExistingGalleryAssets.push(imageObject);
-        this.setState({image: getExistingGalleryAssets});
-      }
-    };
-    const removeSelectedAsset = asset => {
-      const assetsWithoutTheCurrentAsset = image.filter(
-        item => item.uri !== asset,
-      );
-      this.setState({image: assetsWithoutTheCurrentAsset});
-    };
-    const removeSelectedAsset1 = asset => {
-      const assetsWithoutTheCurrentAsset = video.filter(item => item !== asset);
-      this.setState({video: assetsWithoutTheCurrentAsset});
-    };
-    const updateVideoInGallery = async (path, mime, type) => {
-      // console.log('path', path);
-      let multipleImages = [];
-      if (Array.isArray(path)) {
-        const arr = path?.map(async item => {
-          let imageObject = {
-            uri: item.path,
-            name: `video${Date.now()}${item?.filename}.${item?.mime.slice(
-              item?.mime.lastIndexOf('/') + 1,
-            )}`,
-            type: item?.mime,
-            tempType: 'video',
-          };
-          multipleImages.push(imageObject);
+        dispatch(loaderStop());
+        NavService.navigate('BottomTabs', { name: 'Home' });
+      })
+      .catch((error) => {
+        console.log('errorerror', error?.response?.data)
+        Toast.show({
+          text1: 'Failed to create post.',
+          type: 'error',
+          visibilityTime: 3000,
         });
-        await Promise.all(arr);
-        const mergeImagesWithExistingGalleryAssets = [
-          ...video,
-          ...multipleImages,
-        ];
-        console.log(
-          'mergeImagesWithExistingGalleryAssets',
-          mergeImagesWithExistingGalleryAssets,
-        );
-        this.setState({video: mergeImagesWithExistingGalleryAssets});
-      } else {
-        const getExistingGalleryAssets = [...video];
-        const imageObject = {
-          uri: path,
-          name: `video${Date.now()}.${mime.slice(mime.lastIndexOf('/') + 1)}`,
-          type: mime,
-          tempType: type,
-        };
-        getExistingGalleryAssets.push(imageObject);
-        this.setState({video: getExistingGalleryAssets});
-      }
-    };
-    return (
-      <AppBackground
-        title={'Create Post'}
-        onBack={() => NavService.navigate('BottomTabs', {name: 'Home'})}
-        onVideoPress={() => togglePopUp()}
-        marginHorizontal={false}>
-        <View>
-          <ScrollView
-            style={{
-              position: 'absolute',
-              zIndex: 100,
-              bottom: 10,
-              marginHorizontal: 10,
-              paddingRight: Platform.OS === 'android' ? 36 : 25,
-            }}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}>
-            <>
-              {image?.length > 0 &&
-                image?.map((item, index) => {
-                  console.log('itemCheckForFram', item);
-                  return (
-                    <View key={index + 1} style={{position: 'relative'}}>
-                      <View>
-                        <TouchableOpacity
-                          onPress={() => removeSelectedAsset(item.uri)}
-                          style={styles.crossContainer}>
-                          <Text style={styles.cross}>X</Text>
-                        </TouchableOpacity>
-                      </View>
-                      <Image
-                        source={{uri: item?.uri}}
-                        style={styles.videoStyle}
-                      />
-                    </View>
-                  );
-                })}
-              {video?.length > 0 &&
-                video?.map((item, index) => {
-                  console.log('itemVidoeeeosFrameConsole', item);
-                  return (
-                    <View key={index + 1} style={{position: 'relative'}}>
-                      <View>
-                        <TouchableOpacity
-                          onPress={() => removeSelectedAsset1(item)}
-                          style={styles.crossContainer}>
-                          <Text style={styles.cross}>X</Text>
-                        </TouchableOpacity>
-                      </View>
-                      <Image
-                        source={appIcons.videoicon}
-                        style={styles.videoStyle}
-                      />
-                    </View>
-                  );
-                })}
-            </>
-          </ScrollView>
-          <TextInput
-            maxLength={275}
-            style={styles.dec}
-            textAlignVertical="top"
-            multiline
-            editable
-            blurOnSubmit={true}
-            placeholder={'Write something.'}
-            placeholderTextColor={colors.lightGray1}
-            value={description}
-            onChangeText={value => this.setState({description: value})}
-          />
-        </View>
+        dispatch(loaderStop());
+      });
+  };
+  const removeSelectedAsset = (asset) => {
+    setImage((prevImage) => prevImage.filter((item) => item.uri !== asset));
+  };
+  const saveAddress = (address, geometry) => {
+    console.log('geometrygeometry', geometry)
+    setLatitude(geometry.location.lat);
+    setLongitude(geometry.location.lng);
+    setAddress(address);
+  };
+
+  return (
+    <AppBackground onBack={() => NavService.navigate('BottomTabs', { name: 'Home' })} title="Create Post">
+      <ScrollView style={{ paddingHorizontal: 0 }} contentContainerStyle={{ paddingBottom: '20%' }}>
+        <CustomTextInput containerStyle={{ width: '90%' }} placeholder="Name" value={name} onChangeText={setName} />
+        <TextInput
+          maxLength={275}
+          style={styles.dec}
+          textAlignVertical="top"
+          multiline
+          editable
+          blurOnSubmit={true}
+          placeholder={'Write something.'}
+          placeholderTextColor={colors.black}
+          value={description}
+          onChangeText={(value) => setDescription(value)}
+        />
+        <CustomMultiSelect
+          options={serviceOptions}
+          selectedValues={selectedServices}
+          onSelectionChange={setSelectedServices}
+        />
+        <GooglePlaceAutocomplete
+          placeholder={'Address'}
+          callback={saveAddress}
+          rightIcon={true}
+          wrapperStyles={{ alignSelf: 'center', width: '90%', }}
+        />
+        <CustomTextInput
+          placeholder="Price"
+          value={price}
+          onChangeText={setPrice}
+          keyboardType="numeric"
+          containerStyle={{ width: '90%', marginVertical: 10 }}
+        />
+           <View style={{flexWrap:'wrap',flexDirection:'row',marginHorizontal:20,}}>
+           {image.length > 0 &&
+            image.map((item, index) => (
+              <View key={index + 1} style={{ position: 'relative' }}>
+                <TouchableOpacity
+                  onPress={() => removeSelectedAsset(item.uri)}
+                  style={styles.crossContainer}>
+                  <Text style={styles.cross}>X</Text>
+                </TouchableOpacity>
+                <Image source={{ uri: item.uri }} style={styles.videoStyle} />
+              </View>
+            ))}
+           </View>
+   
 
         <View style={styles.row}>
           <CustomImagePicker
             isMultiple={true}
             onImageChange={(path, mime, type) => {
               updateImageInGallery(path, mime, type);
-              // if (type == 'video') {
-              //   // this.setState({video: path});
-              //   // this.setState({videoMime: mime});
-              //   // this.setState({type: type});
-              //   updateVideoInGallery(path, mime, type);
-              // } else {
-              //   // this.setState({image: path});
-              //   // this.setState({Imagemime: mime});
-              //   // this.setState({type: type});
-              //   updateImageInGallery(path, mime, type);
-              // }
             }}
-            style={{justifyContent: 'flex-end'}}>
+            style={{ justifyContent: 'flex-end' }}>
             {image.length < 10 && (
               <View style={styles.rowIcons}>
                 <Image style={styles.icons} source={appIcons.photos} />
@@ -309,41 +201,12 @@ class CreatePost extends Component {
               </View>
             )}
           </CustomImagePicker>
-          <CustomVideoPicker
-            isMultiple={true}
-            onImageChange={(path, mime, type) => {
-              updateVideoInGallery(path, mime, type);
-            }}
-            style={{justifyContent: 'flex-end'}}>
-            {video.length == 0 && (
-              <View style={styles.rowIcons}>
-                <Image style={styles.icons} source={appIcons.videos} />
-                <Text style={styles.title}>Videos</Text>
-              </View>
-            )}
-          </CustomVideoPicker>
         </View>
-        {params && params?.screenName == 'GroupName' ? (
-          <View style={[styles.flexRow, [styles.bottomBtnsView]]}>
-            <CustomButton
-              title={'Create Session'}
-              buttonStyle={[styles.bottomBtn, {backgroundColor: colors.black}]}
-              textStyle={styles.btnTitle}
-              onPress={() => NavService.navigate('CreateSession')}
-            />
-            <CustomButton
-              title={'Post'}
-              buttonStyle={styles.bottomBtn}
-              textStyle={styles.btnTitle}
-              onPress={this?.onSubmitGroupPost}
-            />
-          </View>
-        ) : (
-          <CustomButton onPress={this.onSubmit} title="Post" />
-        )}
-      </AppBackground>
-    );
-  }
-}
-const actions = {createPost};
-export default connect(null, actions)(CreatePost);
+
+        <CustomButton buttonStyle={styles.buttonStyle} onPress={onSubmit} title="Create Post" />
+      </ScrollView>
+    </AppBackground>
+  );
+};
+
+export default CreatePost;

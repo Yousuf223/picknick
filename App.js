@@ -94,7 +94,7 @@ const App = () => {
       <GestureHandlerRootView style={styles.container}>
         <StatusBar
           translucent={true}
-          backgroundColor="#fff"
+          backgroundColor="transparent"
           barStyle="dark-content"
 
         />
