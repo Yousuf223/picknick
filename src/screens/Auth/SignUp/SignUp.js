@@ -72,7 +72,6 @@ class SignUp extends Component {
       let payload = {
         email: email,
         password: password,
-        confirmPassword: ConfirmPassword,
         role:role
       };
       this.props.signUpUser(payload);

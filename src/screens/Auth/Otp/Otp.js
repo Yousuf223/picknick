@@ -54,22 +54,13 @@ const Otp = ({ navigation, route }) => {
 
     const otpCode = otp.join('');
     if (otpCode.length === otp.length) {
-      if (otpData?.email) {
-        const payload = {
-          role: otpData.role,
-          email: otpData.email,
-          password: otpData.password,
-          confirmPassword: otpData.confirmPassword,
-          otp: code
-        };
-        dispatch(otpVerify(payload));
-      } else {
-        Toast.show({
-          text1: 'Email is not available.',
-          type: 'error',
-          visibilityTime: 3000,
-        });
-      }
+      const payload = {
+        role: otpData.role,
+        password: otpData.password,
+        token: otpData.token,
+        otp: code
+      };
+      dispatch(otpVerify(payload));
     } else {
       Toast.show({
         text1: "OTP field can't be empty or incomplete.",

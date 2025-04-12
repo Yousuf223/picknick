@@ -38,7 +38,6 @@ const CreatePost = () => {
   const [latitude, setLatitude] = useState('33');
   const [price, setPrice] = useState('');
   const [image, setImage] = useState([]);
-  console.log('selectedServicesselectedServices', selectedServices)
   const serviceOptions = [
     { id: '1', name: 'Parking Area' },
     { id: '2', name: 'Swimming Pool' },
@@ -91,7 +90,6 @@ const CreatePost = () => {
     const payload = new FormData();
     payload.append('name', name);
     payload.append('description', description);
-
     payload.append('address', 'New York');
     payload.append('longitude', longitude);
     payload.append('latitude', latitude);
@@ -141,6 +139,7 @@ const CreatePost = () => {
   return (
     <AppBackground onBack={() => NavService.navigate('BottomTabs', { name: 'Home' })} title="Create Post">
       <ScrollView style={{ paddingHorizontal: 0 }} contentContainerStyle={{ paddingBottom: '20%' }}>
+        
         <CustomTextInput containerStyle={{ width: '90%' }} placeholder="Name" value={name} onChangeText={setName} />
         <TextInput
           maxLength={275}
@@ -172,6 +171,7 @@ const CreatePost = () => {
           keyboardType="numeric"
           containerStyle={{ width: '90%', marginVertical: 10 }}
         />
+        
            <View style={{flexWrap:'wrap',flexDirection:'row',marginHorizontal:20,}}>
            {image.length > 0 &&
             image.map((item, index) => (

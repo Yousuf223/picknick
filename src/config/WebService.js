@@ -3,7 +3,7 @@ import ApiSauce from '../services/ApiSauce';
 import store from '../redux';
 
 // export const BASE_URL = 'https://sn6jm18m-8000.inc1.devtunnels.ms/api/v1/';
-export const BASE_URL = 'https://sn6jm18m-4000.inc1.devtunnels.ms/api/v1/';
+export const BASE_URL = 'https://ldq8gkns-5000.inc1.devtunnels.ms/api/v1/';
 export const ASSETS_URL = 'https://3239dgd1-8000.inc1.devtunnels.ms/';
 export const WEB_SOCKET_URL = 'https://host2.appsstaging.com:3018/';
 export const GOOGLE_MAPS_URL =
@@ -50,7 +50,7 @@ export const SIGNUP = {
   type: REQUEST_TYPE.POST,
 };
 export const VERIFY_OTP = {
-  route: 'auth/verify-otp',
+  route: 'auth/verify-signup-otp',
   access_token_required: false,
   type: REQUEST_TYPE.POST,
 };

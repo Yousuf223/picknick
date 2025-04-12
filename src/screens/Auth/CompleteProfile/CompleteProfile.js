@@ -31,6 +31,7 @@ import AppBackground from '../../../components/AppBackground';
 import GooglePlaceAutocomplete from '../../../components/GooglePlaceAutocomplete';
 import axios from 'axios';
 import { loaderStart, loaderStop } from '../../../redux/actions/appAction';
+import { BASE_URL } from '../../../config/WebService';
 
 const CompleteProfile = ({ route }) => {
   const actionSheetGenderRef = useRef();
@@ -95,12 +96,13 @@ const CompleteProfile = ({ route }) => {
     const formData = new FormData();
     formData.append('firstName', firstName);
     formData.append('lastName', lastName);
-    formData.append('gender', 'male');
+    formData.append('gender', gender);
     formData.append('dob', '2001-07-17');
     formData.append('location', address);
     formData.append('longitude', '20.19');
     formData.append('latitude', '18.20');
     formData.append('city', city);
+    formData.append('country','Pakistan')
     if (profileImage) {
       formData.append('profilePicture', {
         uri: profileImage?.path,
@@ -113,7 +115,7 @@ const CompleteProfile = ({ route }) => {
     // dispatch(completeProfile(formData))
     try {
       dispatch(loaderStart())
-      const response = await axios.post('https://3239dgd1-8000.inc1.devtunnels.ms/api/v1/auth/user-complete-profile', formData, {
+      const response = await axios.post(`${BASE_URL}auth/complete-profile`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`,
@@ -180,7 +182,7 @@ const CompleteProfile = ({ route }) => {
     // dispatch(completeProfile(formData))
     try {
       dispatch(loaderStart())
-      const response = await axios.post('https://3239dgd1-8000.inc1.devtunnels.ms/api/v1/auth/vendor-complete-profile', formData, {
+      const response = await axios.post(`${BASE_URL}auth/vendor-complete-profile`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`,
@@ -319,7 +321,7 @@ const CompleteProfile = ({ route }) => {
                 {stateField ? stateField : 'Country'}
               </Text>
             </TouchableOpacity>
-            {role == 'Vendor' && (
+            {/* {role == 'Vendor' && (
               <>
                 <Text style={styles.titleId}>
                   Upload Government ID Card and other Business license
@@ -348,12 +350,13 @@ const CompleteProfile = ({ route }) => {
                   </ImagePicker>
                 </TouchableOpacity>
               </>
-            )}
+            )} */}
 
             <CustomButton
               buttonStyle={styles.buttonStyle}
               title="Submit"
-              onPress={role == 'User' ? onSubmit : onVendorSubmit}
+              onPress={()=> onSubmit()}
+              // onPress={role == 'User' ? onSubmit : onVendorSubmit}
             />
           </View>
         </ScrollView>

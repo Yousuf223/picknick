@@ -89,9 +89,9 @@ function* signUp() {
           const paramData = {
             email: payload.email,
             password: payload.password,
-            confirmPassword: payload.confirmPassword,
+            token: response?.data?.token,
             role:payload.role,
-            otp:response.data
+            otp:response?.data?.otp
           }
         
           yield put(setOtpData(paramData));
@@ -144,9 +144,9 @@ function* oTPVerify() {
         Util.DialogAlert(response.message);
       }
     } catch (error) {
-      console.log('error', error);
+      console.log('Otp Error ----', error);
       yield put(loaderStop());
-      Util.DialogAlert(error.message);
+      Util.DialogAlert(error.message[0]?.message);
     }
   }
 }
