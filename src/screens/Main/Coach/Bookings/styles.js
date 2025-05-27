@@ -22,15 +22,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 15,
     padding: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 5,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 4 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 6,
+    // elevation: 5,
+    width:'100%',
+    borderWidth:1,
+    borderColor:colors.lightGray1
   },
   bookingTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '500',
     color: '#333',
   },
   bookingDetails: {
@@ -71,7 +74,7 @@ const styles = StyleSheet.create({
     color: '#888',
   },
   cardData: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
     marginTop: 20,
   },
   userImage:{
@@ -84,7 +87,7 @@ const styles = StyleSheet.create({
      height:48,
      justifyContent:'center',
      alignItems:'center',
-     paddingHorizontal:40,
+     paddingHorizontal:10,
      width:'45%',
      borderColor:colors.primary,
      borderRadius:10,
@@ -101,6 +104,17 @@ const styles = StyleSheet.create({
   filterButtonText:{
     color:colors.white,
     fontWeight:'500'
+  },
+  buttonStyle:{
+    width:120,
+    alignSelf:'flex-end',
+    marginTop:10
+  },
+  buttonStyle1:{
+    width:120,
+    alignSelf:'flex-end',
+    marginTop:10,
+    borderColor:colors.secondary
   }
 });
 export default styles;

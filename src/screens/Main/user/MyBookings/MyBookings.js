@@ -26,7 +26,6 @@ const MyBookings = () => {
     const btnData = [
         { name: 'PENDING' },
         { name: 'ACCEPTED' },
-        { name: 'REJECTED' },
         { name: 'COMPLETED' }
     ]
     useEffect(() => {
@@ -39,7 +38,7 @@ const MyBookings = () => {
     const getBookingSearch = async () => {
         try {
             dispatch(loaderStart());
-            const response = await axios.get(`${BASE_URL}user/home/get-bookings-by-type`, {
+            const response = await axios.get(`${BASE_URL}user/my-bookings`, {
                 params: {
                     type: filterType,
                 },
@@ -47,13 +46,13 @@ const MyBookings = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            if (response) {cd
+            if (response) {
                 dispatch(loaderStop());
                 setData(response.data?.data);
             }
         } catch (error) {
             dispatch(loaderStop());
-            console.error('Error fetching bookings:', error?.response?.data);
+            console.error('Error fetching bookings:', error?.response);
         }
     };
 
@@ -62,12 +61,14 @@ const MyBookings = () => {
         return (
             <View style={styles.bookingCard}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
-                    <Image style={styles.userImage} source={{ uri: item?.vendorId?.profileImage }} />
+                    <Image style={styles.userImage} source={{ uri: item?.listingId?.userId?.profileImage }} />
                     <Text style={[styles.bookingTitle, { paddingLeft: 12 }]}>
-                        {item?.vendorId?.firstName + ' ' + item?.vendorId?.lastName}
+                        {item?.listingId?.userId?.firstName + ' ' + item?.listingId?.userId?.lastName}
                     </Text>
+                    
                 </View>
-                <Text style={styles.bookingTitle}>Service Name: {item.listing?.name}</Text>
+                <Text style={styles.bookingTitle}>Service Name: {item.listingId?.name}</Text>
+                <Text style={styles.bookingTitle}>Amount: {item.price}</Text>
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', width: '100%' }}>
                     <Text style={[styles.bookingDetails, { flex: 1 }]}>Start Date: {moment(item.startDate).format('MM-DD-YYYY')}</Text>
                     <Text style={[styles.bookingDetails, { flex: 1, textAlign: 'right' }]}>End Date: {moment(item.endDate).format('MM-DD-YYYY')}</Text>
@@ -91,7 +92,7 @@ const MyBookings = () => {
                                 ]}
                                 onPress={() => setFilterType(item.name)}
                             >
-                                <Text style={filterType === item.name ? styles.filterButtonText : { color: colors.black, fontWeight: '500' }}>{item?.name}</Text>
+                                <Text style={filterType === item.name ? styles.filterButtonText : { color: colors.black, fontWeight: '500',fontSize:13 }}>{item?.name}</Text>
                             </TouchableOpacity>
                         )
                     })}

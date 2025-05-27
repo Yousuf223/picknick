@@ -101,7 +101,7 @@ const CreatePost = () => {
     });
     console.log('payloadpayload', payload)
     axios
-      .post(`${BASE_URL}vendor/listings`, payload, {
+      .post(`${BASE_URL}vendor/create-listing`, payload, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,

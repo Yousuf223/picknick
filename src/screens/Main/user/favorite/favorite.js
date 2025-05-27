@@ -32,6 +32,7 @@ const Favorite = () => {
             menu
             title={'Favorite'}
             Cart={true}
+            appLogo={false}
             notification
             marginHorizontal={false}>
             <View style={styles.cardData}>

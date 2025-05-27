@@ -43,19 +43,19 @@ const styles = StyleSheet.create({
     // ...Shadows.shadow5,
     borderRadius: 10,
     backgroundColor: '#ffffff20',
-    width: '90%',
+    width: '94%',
     // marginHorizontal: 6,
     marginVertical: 6,
     alignSelf: "center",
-    shadowColor:colors.secondary,
+    shadowColor:colors.primary,
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 2,
     },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-
-    elevation: 3,
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    
+    elevation: 5,
 
   },
   post: {

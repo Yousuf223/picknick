@@ -47,8 +47,7 @@ const Home = () => {
       appLogo={false}
       notification
       marginHorizontal={false}>
-        <Text style={{color:'#000',marginTop:7,textAlign:'center'}}>Home</Text>
-      {/* <CustomTextInput
+      <CustomTextInput
         leftIcon={appIcons.search}
         placeholder={'Search'}
         value={search}
@@ -67,7 +66,7 @@ const Home = () => {
           renderItem={renderCard}
           contentContainerStyle={{ paddingHorizontal: 10 }}
         />
-      </View> */}
+      </View>
     </AppBackground>
   );
 };

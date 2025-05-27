@@ -105,7 +105,7 @@ function* getServices() {
 
 function* likeList() {
   while (true) {
-    const { responseCallback} = yield take(
+    const {responseCallback} = yield take(
       ActionTypes.LIKES_LIST.REQUEST,
     );
     yield put(loaderStart());
@@ -367,7 +367,7 @@ function* receivedRequest() {
 }
 function* acceptRejectRequest() {
   while (true) {
-    const {params, responseCallback} = yield take(
+    const { params, payload, responseCallback} = yield take(
       ActionTypes.ACCEPT_REQUEST.REQUEST,
     );
     yield put(loaderStart());
@@ -375,9 +375,9 @@ function* acceptRejectRequest() {
       const response = yield call(
         callRequest,
         ACCEPT_REJECT_REQUEST,
-        params,
+        payload,
         '',
-        {},
+         String(params),
         ApiSauce,
       );
       yield put(loaderStop());
@@ -468,9 +468,9 @@ function* likeService() {
       const response = yield call(
         callRequest,
         LIKE_SERVICE,
-        params,
+        null,
         '',
-        {},
+        String(params),
         ApiSauce,
       );
       yield put(loaderStop());

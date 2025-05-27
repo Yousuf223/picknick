@@ -140,6 +140,7 @@ class Drawer extends Component {
         </TouchableOpacity>
       );
     };
+    console.log('useruser',user)
     return (
       <View
         style={{
@@ -193,10 +194,10 @@ class Drawer extends Component {
               size={90}
               innerAsset={profileImage == null ? true : false}
               imageUri={
-                profileImage == null && user?.profileImage == null
+                profileImage == null && user?.data?.profileImage == null
                   ? appIcons.userPlaceholder
-                  : user?.profileImage !== '' && profileImage == null
-                    ? { uri: user?.profileImage }
+                  : user?.data?.profileImage !== '' && profileImage == null
+                    ? { uri: user?.data?.profileImage }
                     : profileImage?.path
               }
               darwerImg
@@ -222,7 +223,7 @@ class Drawer extends Component {
                 textTransform: 'capitalize',
                 fontWeight: '600'
               }}>
-              {user?.firstName} {user?.lastName}
+              {user?.data?.firstName} {user?.data?.lastName}
             </Text>
             <Text
               numberOfLines={1}
@@ -232,7 +233,7 @@ class Drawer extends Component {
                 // fontFamily: family.Oswald_Regular,
                 marginTop: 3,
               }}>
-              {user?.email}
+              {user?.data?.email}
 
             </Text>
           </View>

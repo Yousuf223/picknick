@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import ForgotPassword from '../../screens/Auth/ForgotPassword';
 import RoleSelection from '../../screens/Auth/RoleSelection';
 import SignUp from '../../screens/Auth/SignUp';
+import BussinesDetail from '../../screens/Auth/BussinesDetail/BussinesDetail';
 
 const RootStack = createNativeStackNavigator();
 
@@ -78,7 +79,13 @@ const AuthNavigation = ({initialRoute}) => {
         component={CompleteProfile}
       />
 
-      
+<RootStack.Screen
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+        name="BussinessDetail"
+        component={BussinesDetail}
+      />
     </RootStack.Navigator>
 
 

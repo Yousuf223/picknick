@@ -16,17 +16,17 @@ import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { appLogos } from '../../../assets/index';
 import styles from './styles';
 import { colors } from '../../../utils';
-import { otpVerify, resendOTP } from '../../../redux/actions/authAction';
+import { otpVerify, resendOTP, signUpUser } from '../../../redux/actions/authAction';
 import { useDispatch, useSelector } from 'react-redux';
-
+import axios from 'axios'; // Make sure Axios is installed
+import { BASE_URL } from '../../../config/WebService';
+import { loaderStart, loaderStop } from '../../../redux/actions/appAction';
 const Otp = ({ navigation, route }) => {
-  const otpData = useSelector(state => state?.authReducer?.otpData); 
+  const otpData = useSelector(state => state?.authReducer?.otpData);
   const dispatch = useDispatch();
   const params = route.params?.data
-  // console.log('paramsparamsparams',otpData)
-  useEffect(() => {
-    setFocusIndex(otpData?.otp)
-  }, [])
+
+
   let timer;
   const [code, setCode] = useState('');
   const [timerCode, setTimerCode] = useState(60);
@@ -35,7 +35,8 @@ const Otp = ({ navigation, route }) => {
   const [key, setKey] = useState(0);
   const [otp, setOtp] = useState(['', '', '', '']);
   const [focusIndex, setFocusIndex] = useState('');
-
+  const [resendOtp, setResendOtp] = useState('');
+  const [resendToken, setResendToken] = useState('');
   const inputRefs = useRef([]);
   const handleChange = (text, index) => {
     const newOtp = [...otp];
@@ -57,7 +58,7 @@ const Otp = ({ navigation, route }) => {
       const payload = {
         role: otpData.role,
         password: otpData.password,
-        token: otpData.token,
+        token:resendToken ? resendToken : otpData.token,
         otp: code
       };
       dispatch(otpVerify(payload));
@@ -88,34 +89,56 @@ const Otp = ({ navigation, route }) => {
   };
 
   // Handle reset/resend OTP
+
+
   const handleReset = async () => {
-    if (resend) {
-      setKey(prevKey => prevKey + 1);
-      setResendOtpActive(false);
-      setTimerCode(60);
-      setResend(false);
+    if (!resend) {
+      Toast.show({ text1: "Can't resend OTP. Please try later.", type: 'error' });
+      return;
+    }
 
-      setOtp(['', '', '', '']);
-      setCode('');
+    // Reset states
+    setKey(prevKey => prevKey + 1);
+    setResendOtpActive(false);
+    setTimerCode(60);
+    setResend(false);
+    setOtp(['', '', '', '']);
+    setCode('');
+    startInterval();
 
-      startInterval();
-      const payload = { email: params.email, role: params.role };
-      dispatch(resendOTP(payload, (response) => {
-        console.log('Resend OTP Response:', response);
-  
-        // Assuming 'response.data' contains the focusIndex or data you're looking for
-        setFocusIndex(response);
-  
-      }));
-    } else {
+    const payload = {
+      email: params.email,
+      role: params.role,
+      password: params?.password
+    };
+
+    try {
+        dispatch(loaderStart())
+      const response = await axios.post(`${BASE_URL}auth/signup`, payload);
+
+      console.log('Resend OTP Response:', response.data?.data?.token);
+      setResendToken(response.data?.data?.token)
+      setResendOtp(response.data?.data?.otp);
+      if (response.data) {
+        // setFocusIndex(response.data?.data?.otp);
+        dispatch(loaderStop())
+      
+      } else {
+        console.warn('API returned empty data:', response);
+        dispatch(loaderStop())
+      }
+    } catch (error) {
+      console.error('Resend OTP Failed:', error.response?.data || error.message);
+      dispatch(loaderStop())
       Toast.show({
-        text1: `Can't resend OTP. Please try again later.`,
+        text1: error.response?.data?.message || 'Failed to resend OTP',
         type: 'error',
-        visibilityTime: 3000,
       });
     }
   };
-
+  useEffect(() => {
+    setFocusIndex(params?.otp)
+  }, [])
   useEffect(() => {
     Keyboard.dismiss();
     const backAction = () => {
@@ -206,7 +229,7 @@ const Otp = ({ navigation, route }) => {
             </CountdownCircleTimer>
           </View>
         </View>
-        <Text style={styles.textNormal}>OTP:{focusIndex}</Text>
+        <Text style={styles.textNormal}>OTP:{resendOtp ? resendOtp : focusIndex}</Text>
         <View style={styles.bottomView}>
           <Text style={styles.textNormal}>Didn't receive a code?</Text>
           <TouchableOpacity disabled={timerCode !== 0} onPress={handleReset}>

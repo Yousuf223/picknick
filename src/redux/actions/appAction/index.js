@@ -132,10 +132,11 @@ export function receivedRequest(params, responseCallback) {
     responseCallback,
   };
 }
-export function acceptRejectRequest(params, responseCallback) {
+export function acceptRejectRequest(params, payload, responseCallback) {
   return {
     type: ActionTypes.ACCEPT_REJECT_REQUEST.REQUEST,
     params,
+    payload,
     responseCallback,
   };
 }

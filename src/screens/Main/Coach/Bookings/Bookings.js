@@ -1,41 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, View, Text, TouchableOpacity, Image } from 'react-native';
 import AppBackground from '../../../../components/AppBackground';
-import CustomTextInput from '../../../../components/CustomTextInput';
 import { appIcons } from '../../../../assets';
-import styles from './styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { acceptReject, getBookings, loaderStart, loaderStop } from '../../../../redux/actions/appAction';
+import { acceptReject, acceptRejectRequest, getBookings, loaderStart, loaderStop } from '../../../../redux/actions/appAction';
 import { useIsFocused } from '@react-navigation/native';
-import DatePickerComponent from '../../../../components/datePickerCompoenent';
+
 
 import moment from 'moment';
 import axios from 'axios';
 import { BASE_URL } from '../../../../config/WebService';
 import { colors } from '../../../../utils';
+import CustomButton from '../../../../components/CustomButton';
+import styles from './styles';
+import Toast from 'react-native-toast-message';
 
-const Bookings = () => {
+const MyBookings = () => {
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [data, setData] = useState([]);
-    const [filterType, setFilterType] = useState('UPCOMING'); // Filter type: UPCOMING or PAST
+    const [filterType, setFilterType] = useState('PENDING');
     const token = useSelector(state => state?.authReducer?.userToken);
 
-    const getBookingSearch = async () => {
-        if (!startDate || !endDate) {
-            return;
-        }
 
-        const formattedStartDate = moment(startDate).toISOString();
-        const formattedEndDate = moment(endDate).toISOString();
+    const btnData = [
+        { name: 'PENDING' },
+        { name: 'ACCEPTED' },
+        { name: 'COMPLETED' }
+    ]
+    useEffect(() => {
+        getBookingSearch()
+        // dispatch(loaderStop());
+    }, [filterType]);
+
+
+
+    const getBookingSearch = async () => {
         try {
             dispatch(loaderStart());
-            const response = await axios.get(`${BASE_URL}vendor/bookings/search`, {
+            const response = await axios.get(`${BASE_URL}vendor/my-bookings`, {
                 params: {
-                    startDate: formattedStartDate,
-                    endDate: formattedEndDate,
+                    type: filterType,
                 },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -43,155 +50,88 @@ const Bookings = () => {
             });
             if (response) {
                 dispatch(loaderStop());
-                const currentDate = moment();
-                const filteredData =
-                    filterType === 'PAST'
-                        ? response.data?.data.filter(item => moment(item.startDate).isBefore(currentDate))
-                        : response.data?.data.filter(item => moment(item.startDate).isSameOrAfter(currentDate));
-                setData(filteredData);
-                setEndDate('');
-                setStartDate('');
+                setData(response.data?.data);
             }
         } catch (error) {
             dispatch(loaderStop());
-            console.error('Error fetching bookings:', error);
+            console.error('Error fetching bookings:', error?.response);
         }
     };
-
-    useEffect(() => {
-        getBookingSearch();
-    }, [startDate, endDate]);
-
-    useEffect(() => {
-        if (isFocused) {
-            getBooking();
-        }
-    }, [isFocused]);
-
-    useEffect(() => {
-        dispatch(loaderStop());
-    }, []);
-
-    const getBooking = () => {
-        dispatch(
-            getBookings(response => {
-                const currentDate = moment();
-                const filteredData =
-                    filterType === 'PAST'
-                        ? response.filter(item => moment(item.startDate).isBefore(currentDate))
-                        : response.filter(item => moment(item.startDate).isSameOrAfter(currentDate));
-                setData(filteredData);
-            })
-        );
-    };
-
-    useEffect(() => {
-        if (isFocused) {
-            getBooking();
-        }
-    }, [isFocused, filterType]);
-
-    const handleFilterChange = type => {
-        setFilterType(type);
-    };
-
-    const handleAccept = bookingId => {
-        const param = {
-            bookingId: bookingId,
-            type: 'ACCEPT',
-        };
-        console.log('Booking Accepted:', bookingId);
-        dispatch(
-            acceptReject(param, response => {
-                if (response) {
-                    getBooking();
+    const onSubmit = async (item, type) => {
+        try {
+            dispatch(loaderStart());
+            const response = await axios.patch(
+                `${BASE_URL}vendor/update-booking-status/${item._id}`, 
+                { status: type }, 
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
                 }
-            })
-        );
+            );
+            console.log('Request successful:', response.data);
+            if(response?.data){
+                dispatch(loaderStop());
+                Toast.show({
+                    text1: response?.data?.message,
+                    type: 'success',
+                    visibilityTime: 3000,
+                });
+                getBookingSearch()
+            }
+        } catch (error) {
+            console.error('Request failed:', error?.response?.data || error);
+            dispatch(loaderStop());
+            Toast.show({
+                text1: error?.response?.data?.message || 'Request failed',
+                type: 'error',
+                visibilityTime: 3000,
+            });
+        }
     };
-
-    const handleReject = bookingId => {
-        const param = {
-            bookingId: bookingId,
-            type: 'REJECT',
-        };
-        dispatch(
-            acceptReject(param, response => {
-                console.log('responseresponse', response);
-                if (response) {
-                    getBooking();
-                }
-            })
-        );
-    };
-
     const BookingCard = ({ item }) => {
+        console.log('itemitem', item);
         return (
             <View style={styles.bookingCard}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
-                    <Image style={styles.userImage} source={{ uri: item?.user?.profilePicture }} />
+                    <Image style={styles.userImage} source={{ uri: item?.userId?.profileImage }} />
                     <Text style={[styles.bookingTitle, { paddingLeft: 12 }]}>
-                        {item?.user?.firstName + ' ' + item?.user?.lastName}
+                        {item?.userId?.firstName + ' ' + item?.userId?.lastName}
                     </Text>
-                </View>
-                <Text style={styles.bookingTitle}>Service Name: {item.listing?.name}</Text>
-                <Text style={styles.bookingDetails}>Start Date: {moment(item.startDate).format('MM-DD-YYYY')}</Text>
-                <Text style={styles.bookingDetails}>End Date: {moment(item.endDate).format('MM-DD-YYYY')}</Text>
-                {item?.status !== 'ACCEPTED' && (
-                    <View style={styles.buttonsContainer}>
-                        <TouchableOpacity
-                            style={[styles.button, styles.acceptButton]}
-                            onPress={() => handleAccept(item._id)}
-                        >
-                            <Text style={styles.buttonText}>Accept</Text>
-                        </TouchableOpacity>
 
-                        <TouchableOpacity
-                            style={[styles.button, styles.rejectButton]}
-                            onPress={() => handleReject(item._id)}
-                        >
-                            <Text style={styles.buttonText}>Reject</Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
+                </View>
+                <Text style={styles.bookingTitle}>Service Name: {item.listingId?.name}</Text>
+                <Text style={styles.bookingTitle}>Amount: {item.price}</Text>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', width: '100%' }}>
+                    <Text style={[styles.bookingDetails, { flex: 1 }]}>Start Date: {moment(item.startDate).format('MM-DD-YYYY')}</Text>
+                    <Text style={[styles.bookingDetails, { flex: 1, textAlign: 'right' }]}>End Date: {moment(item.endDate).format('MM-DD-YYYY')}</Text>
+                </View>
+                {item?.status == 'PENDING' && <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <CustomButton onPress={() => onSubmit(item, 'ACCEPTED')} buttonStyle={styles.buttonStyle} title='Accept' />
+                    <CustomButton onPress={() => onSubmit(item, 'REJECTED')} buttonStyle={styles.buttonStyle1} color={colors.secondary} title='Reject' />
+                </View>}
             </View>
         );
     };
 
     return (
-        <AppBackground back appLogo={false} title={'Booking Requests'} marginHorizontal={false}>
+        <AppBackground back appLogo={false} title={'My Bookings'} marginHorizontal={false}>
             <View>
-                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', marginVertical: 15 }}>
-                    <DatePickerComponent
-                        label={startDate ? moment(startDate).format('MM-DD-YYYY') : 'Start Date'}
-                        mode="date"
-                        onConfirm={date => setStartDate(date)}
-                    />
-                    <DatePickerComponent
-                        label={endDate ? moment(endDate).format('MM-DD-YYYY') : 'End Date'}
-                        mode="date"
-                        onConfirm={date => setEndDate(date)}
-                    />
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
-                    <TouchableOpacity
-                        style={[
-                            styles.filterButton,
-                            filterType === 'PAST' && styles.activeFilterButton,
-                        ]}
-                        onPress={() => handleFilterChange('PAST')}
-                    >
-                        <Text style={filterType === 'PAST' ? styles.filterButtonText : { color: colors.black, fontWeight: '500' }}>Past</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[
-                            styles.filterButton,
-                            filterType === 'UPCOMING' && styles.activeFilterButton,
-                        ]}
-                        onPress={() => handleFilterChange('UPCOMING')}
-                    >
-                        <Text style={filterType === 'UPCOMING' ? styles.filterButtonText : { color: colors.black, fontWeight: '500' }}>Upcoming</Text>
-                    </TouchableOpacity>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 20, flexWrap: 'wrap', }}>
+                    {btnData?.map((item, index) => {
+                        return (
+                            <TouchableOpacity
+                                style={[
+                                    index < 1 && { marginBottom: 16 }, styles.filterButton,
+                                    filterType === item.name && styles.activeFilterButton,
+                                ]}
+                                onPress={() => setFilterType(item.name)}
+                            >
+                                <Text style={filterType === item.name ? styles.filterButtonText : { color: colors.black, fontWeight: '500', fontSize: 13 }}>{item?.name}</Text>
+                            </TouchableOpacity>
+                        )
+                    })}
+
                 </View>
             </View>
 
@@ -213,4 +153,4 @@ const Bookings = () => {
     );
 };
 
-export default Bookings;
+export default MyBookings;

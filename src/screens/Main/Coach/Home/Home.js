@@ -28,7 +28,7 @@ const Home = () => {
       }));
     }
   }, [isFocused]);
-
+console.log('userDatauserData',userData?.data)
   return (
     <AppBackground
       menu
@@ -54,8 +54,8 @@ const Home = () => {
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{ flexGrow: 1, paddingBottom: '40%' }}
           renderItem={({ item }) => (
-            <Card userImage={userData?.profileImage ? { uri: userData?.profileImage } : appIcons.userPlaceholder}
-              fullName={userData?.firstName + ' ' + userData?.lastName}
+            <Card userImage={userData?.data?.profileImage ? { uri: userData?.data?.profileImage } : appIcons.userPlaceholder}
+              fullName={userData?.data?.firstName + ' ' + userData?.data?.lastName}
               image={item?.media?.length > 0 && { uri: item?.media[0]?.mediaPath }}
               price={item?.price} title={item?.name} item={item} />
           )}

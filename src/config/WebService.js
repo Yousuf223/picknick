@@ -3,7 +3,7 @@ import ApiSauce from '../services/ApiSauce';
 import store from '../redux';
 
 // export const BASE_URL = 'https://sn6jm18m-8000.inc1.devtunnels.ms/api/v1/';
-export const BASE_URL = 'https://ldq8gkns-5000.inc1.devtunnels.ms/api/v1/';
+export const BASE_URL = 'https://sn6jm18m-5000.inc1.devtunnels.ms/api/v1/';
 export const ASSETS_URL = 'https://3239dgd1-8000.inc1.devtunnels.ms/';
 export const WEB_SOCKET_URL = 'https://host2.appsstaging.com:3018/';
 export const GOOGLE_MAPS_URL =
@@ -121,17 +121,17 @@ export const CREATE_POST = {
   type: REQUEST_TYPE.POST,
 };
 export const GET_LIST = {
-  route: 'vendor/listings/all',
+  route: 'vendor/my-listings',
   access_token_required: true,
   type: REQUEST_TYPE.GET,
 };
 export const GET_SERVICE = {
-  route: 'user/home/listings',
+  route: 'user/listings',
   access_token_required: true,
   type: REQUEST_TYPE.GET,
 };
 export const LIKES_LIST = {
-  route: 'user/home/wish-list',
+  route: 'user/wishlist',
   access_token_required: true,
   type: REQUEST_TYPE.GET,
 };
@@ -161,7 +161,7 @@ export const GET_NOTIFICATION_ONOFF = {
   type: REQUEST_TYPE.GET,
 };
 export const SERVICE_DETAIL = {
-  route: 'user/home/listing-detail',
+  route: 'user/listing/detail',
   access_token_required: true,
   type: REQUEST_TYPE.GET,
 };
@@ -191,7 +191,7 @@ export const CREATE_HEEDBACK = {
   type: REQUEST_TYPE.POST,
 };
 export const CREATE_BOOKING = {
-  route: 'user/home/create-booking',
+  route: 'user/booking',
   access_token_required: true,
   type: REQUEST_TYPE.POST,
 };
@@ -206,7 +206,7 @@ export const RECEIVED_REQUEST = {
   type: REQUEST_TYPE.GET,
 };
 export const ACCEPT_REJECT_REQUEST = {
-  route: 'vendor/bookings/accept-reject',
+  route: 'vendor/update-booking-status',
   access_token_required: true,
   type: REQUEST_TYPE.PATCH,
 };
@@ -226,7 +226,7 @@ export const API_LIKE = {
   type: REQUEST_TYPE.GET,
 };
 export const LIKE_SERVICE = {
-  route: 'user/home/fav-unfav',
+  route: 'user/fav-unfav',
   access_token_required: true,
   type: REQUEST_TYPE.PATCH,
 };

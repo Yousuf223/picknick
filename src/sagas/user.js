@@ -49,12 +49,20 @@ function* login() {
             yield put(saveTokenForLoginUser(response?.token));
             NavService.navigate('CompleteProfile', { email: payload?.email });
             Util.DialogAlert(response.message, 'success');
-          } else {
+          } 
+          else if (response?.data?.user?.role !== 'User' && !response?.data?.user?.isBussinessDetailCompleted) {
+            yield put(saveTokenForLoginUser(response?.token));
+            NavService.navigate('BussinessDetail');
+          }
+  
+          // All conditions satisfied — proceed to login
+          else {
             console.log('login response', response.data);
             yield put(saveTokenForLoginUser(response?.token));
             yield put(loginUser(response?.data?.user));
             Util.DialogAlert('Login Successfully', 'success');
           }
+      
         }
       }
     } catch (error) {
@@ -110,7 +118,7 @@ function* signUp() {
 
       yield put(loaderStop());
       if (error && error.message) {
-        Util.DialogAlert(error.message[0]?.message);
+        Util.DialogAlert(error.message);
       } else {
         Util.DialogAlert('Something went wrong!');
       }
@@ -144,9 +152,9 @@ function* oTPVerify() {
         Util.DialogAlert(response.message);
       }
     } catch (error) {
-      console.log('Otp Error ----', error);
+      console.log('Otp Error ----', error?.message);
       yield put(loaderStop());
-      Util.DialogAlert(error.message[0]?.message);
+      Util.DialogAlert(error?.message);
     }
   }
 }
@@ -243,7 +251,7 @@ function* completeProfile() {
     } catch (error) {
       console.log('errorerrorerror', error)
       yield put(loaderStop());
-      // Util.DialogAlert(error.message);
+      Util.DialogAlert(error?.message);
     }
   }
 }

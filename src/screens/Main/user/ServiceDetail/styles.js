@@ -18,13 +18,13 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     position: 'absolute',
-    top: 25,
+    top: 35,
     right: 20,
     flexDirection: 'row',
   },
   iconContainer1:{
     position: 'absolute',
-    top: 25,
+    top: 35,
     left: 20,
     flexDirection: 'row',
   },
@@ -113,6 +113,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  userImage:{
+    width:60,
+    height:60,
+    borderRadius:40,
+    resizeMode:'contain'
+  },
+  userRow:{
+    paddingHorizontal:13,
+    flexDirection:"row",
+    marginTop:10,
+    alignItems:'center'
+  }
 });
 
 

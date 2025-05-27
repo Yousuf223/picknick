@@ -8,8 +8,10 @@ import moment from 'moment';
 import Img from '../../../components/Img';
 import { appIcons } from '../../../assets';
 import Toast from 'react-native-toast-message';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createBooking } from '../../../redux/actions/appAction';
+import axios from 'axios';
+import { BASE_URL } from '../../../config/WebService';
 
 function CreateBooking(props) {
   const {
@@ -21,6 +23,7 @@ function CreateBooking(props) {
     id
   } = props;
   const dispatch = useDispatch()
+  const token = useSelector((state) => state.authReducer.userToken);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [startTime, setStartTime] = useState('');
@@ -31,6 +34,8 @@ function CreateBooking(props) {
     }
     return '';
   };
+
+
   const handleBooking = async () => {
     const formattedStartDate = formatDateTime(
       startDate ? startDate.toISOString().split('T')[0] : '',
@@ -40,29 +45,60 @@ function CreateBooking(props) {
       endDate ? endDate.toISOString().split('T')[0] : '',
       endTime ? endTime.toISOString().split('T')[1].slice(0, 5) : ''
     );
-
+  
     if (!formattedStartDate || !formattedEndDate) {
       Toast.show({
         text1: `Please select all date and time fields.`,
         type: 'error',
         visibilityTime: 3000,
       });
-
       return;
     }
 
+  
     const payload = {
       startDate: formattedStartDate,
       endDate: formattedEndDate,
       listingId: id
     };
-    console.log('fdfsf',payload)
-    dispatch(createBooking(payload, response =>{
-      if(response){
-        setModalVisible(false)
+  
+    try {
+      // ✅ FIX: Place `params` outside of `headers`
+      const availabilityResponse = await axios.get(
+        `${BASE_URL}user/booking-availability`,
+        {
+          params: payload,
+          headers: {
+            Authorization: `Bearer ${token}` 
+          }
+        }
+      );
+  
+      if (availabilityResponse) {
+        dispatch(createBooking(payload, response => {
+          if (response) {
+            setModalVisible(false);
+          }
+        }));
+      } else {
+        Toast.show({
+          text1: 'Selected slot is not available.',
+          type: 'error',
+          visibilityTime: 3000,
+        });
       }
-    }));
+  
+    } catch (error) {
+      console.error('Availability check failed:', error?.response?.data || error);
+      Toast.show({
+        text1: error?.message,
+        type: 'error',
+        visibilityTime: 3000,
+      });
+    }
   };
+  
+
 
   return (
     <CustomModal visible={isModalVisible} togglePopup={togglePopup}>
@@ -109,7 +145,7 @@ function CreateBooking(props) {
         <CustomButton
           title="Book"
           buttonStyle={styles.singleBtn}
-          onPress={()=>handleBooking()}
+          onPress={() => handleBooking()}
         />
       </View>
     </CustomModal>

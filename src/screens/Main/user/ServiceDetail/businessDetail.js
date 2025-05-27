@@ -4,13 +4,16 @@ import { appIcons } from '../../../../assets'; // Ensure the path is correct
 import styles from './styles';
 import { colors } from '../../../../utils';
 import NavService from '../../../../helpers/NavService';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getServicesDetail, likeService } from '../../../../redux/actions/appAction';
 import CustomButton from '../../../../components/CustomButton';
 import CreateBooking from '../../../../containers/Popup/CreateBooking/CreateBooking';
+import axios from 'axios';
+import { BASE_URL } from '../../../../config/WebService';
 
 const ServiceDetail = ({ route }) => {
   const dispatch = useDispatch();
+   const token = useSelector((state) => state.authReducer.userToken);
   const { id } = route.params
   console.log('-sadsad', id)
   const [data, setData] = useState([
@@ -29,12 +32,25 @@ const ServiceDetail = ({ route }) => {
   }, [])
   let a = 2
   console.log( 'type of', typeof a)
-  const onLike = () => {
-    const param = {listingId :id };
-    dispatch(likeService(param, response => {
-      setLike(response?.isFavourite)
-    }));
+  const onLike = async () => {
+    try {
+      const response = await axios.patch(
+        `${BASE_URL}user/fav-unfav/${id}`,
+        {}, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+  console.log('responseresponse',response?.data?.data)
+      setLike(response?.data?.data?.isFavorite);
+    } catch (error) {
+      console.error('Error liking the item:', error);
+    }
   };
+  
+  console.log('idid',id)
   const renderCard = ({ item }) => {
     console.log('itemitem', item)
     return (
@@ -47,6 +63,7 @@ const ServiceDetail = ({ route }) => {
       </View>
     );
   };
+  console.log(detail,'detaildetail')
   return (
     <>
       <ScrollView style={styles.container}>
@@ -73,7 +90,10 @@ const ServiceDetail = ({ route }) => {
             </TouchableOpacity>
           </View>
         </View>
-
+        <View style={styles.userRow}>
+          <Image style={styles.userImage} source={{uri:detail?.listing?.userId?.profileImage}} />
+          <Text>{detail?.listing?.userId?.lastName}</Text>
+        </View>
         {/* Content Section */}
         <View style={styles.content}>
           <Text style={styles.title}>{detail?.listing?.name}</Text>

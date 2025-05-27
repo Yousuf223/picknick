@@ -52,8 +52,8 @@ const CompleteProfile = ({ route }) => {
   const [selectDate, setSelectDate] = useState('');
   const [keyboardStatus, setKeyboardStatus] = useState(false);
   const [stateField, setStateField] = useState('');
-  const { role } = useSelector(state => state?.authReducer);
-
+  const role = useSelector(state => state?.authReducer?.role);
+  console.log('rolerole', role)
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
       setKeyboardStatus(true);
@@ -62,7 +62,6 @@ const CompleteProfile = ({ route }) => {
     const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
       setKeyboardStatus(false);
     });
-
     return () => {
       showSubscription.remove();
       hideSubscription.remove();
@@ -83,6 +82,7 @@ const CompleteProfile = ({ route }) => {
   };
 
   const onSubmit = async () => {
+
     const validationError = validateForm();
     if (validationError) {
       Toast.show({
@@ -102,7 +102,7 @@ const CompleteProfile = ({ route }) => {
     formData.append('longitude', '20.19');
     formData.append('latitude', '18.20');
     formData.append('city', city);
-    formData.append('country','Pakistan')
+    formData.append('country', 'Pakistan')
     if (profileImage) {
       formData.append('profilePicture', {
         uri: profileImage?.path,
@@ -122,9 +122,15 @@ const CompleteProfile = ({ route }) => {
         },
       });
       if (response) {
+        if (role == 'Vendor') {
+          dispatch(loaderStop())
+          NavService.navigate('BussinessDetail')
+        } else {
+          dispatch(loaderStop())
+          dispatch(loginUser(response.data))
+        }
         console.log('Response:', response.data);
-        dispatch(loaderStop())
-        dispatch(loginUser(response.data))
+
       }
 
     } catch (error) {
@@ -355,8 +361,8 @@ const CompleteProfile = ({ route }) => {
             <CustomButton
               buttonStyle={styles.buttonStyle}
               title="Submit"
-              onPress={()=> onSubmit()}
-              // onPress={role == 'User' ? onSubmit : onVendorSubmit}
+              onPress={() =>     NavService.navigate('BussinessDetail')}
+            // onPress={role == 'User' ? onSubmit : onVendorSubmit}
             />
           </View>
         </ScrollView>
