@@ -37,7 +37,7 @@ const UserNavigation = ({ initialRoute }) => {
       <Stack.Screen name="Favorite" component={Favorite} />
       <Stack.Screen name="MyBookings" component={MyBookings} />
       <Stack.Screen name="RatingScreen" component={RatingScreen} />
-      <Stack.Screen name="Messages" component={Messages} />
+      {/* <Stack.Screen name="Messages" component={Messages} /> */}
       <Stack.Screen name="Notification" component={Notification} />
 
 

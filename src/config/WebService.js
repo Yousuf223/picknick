@@ -3,7 +3,7 @@ import ApiSauce from '../services/ApiSauce';
 import store from '../redux';
 
 // export const BASE_URL = 'https://sn6jm18m-8000.inc1.devtunnels.ms/api/v1/';
-export const BASE_URL = 'https://sn6jm18m-5000.inc1.devtunnels.ms/api/v1/';
+export const BASE_URL = 'https://hfvnq53r-5000.usw3.devtunnels.ms/api/v1';
 export const ASSETS_URL = 'https://3239dgd1-8000.inc1.devtunnels.ms/';
 export const WEB_SOCKET_URL = 'https://host2.appsstaging.com:3018/';
 export const GOOGLE_MAPS_URL =
@@ -81,7 +81,7 @@ export const SOCIAL_SIGIN = {
   type: REQUEST_TYPE.POST,
 };
 export const LOGOUT = {
-  route: 'logout',
+  route: 'auth/logout',
   access_token_required: true,
   type: REQUEST_TYPE.POST,
 };
@@ -176,9 +176,9 @@ export const GET_ALL_LEVELS_BY_ID = {
   type: REQUEST_TYPE.GET,
 };
 export const SEND_REQUEST = {
-  route: 'send-request',
+  route: 'auth/fcm',
   access_token_required: true,
-  type: REQUEST_TYPE.POST,
+  type: REQUEST_TYPE.PATCH,
 };
 export const UPLOAD_image = {
   route: 'feedbacks/upload-picture',

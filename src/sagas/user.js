@@ -6,6 +6,7 @@ import {
   logoutUser,
   loginCurrentUser,
   setOtpData,
+  saveRefereshTokenForLoginUser,
 } from '../redux/actions/authAction';
 import { loaderStart, loaderStop, removeDataForLogoutUser, } from '../redux/actions/appAction';
 import API_URL, {
@@ -30,7 +31,7 @@ import NavService from '../helpers/NavService';
 
 function* login() {
   while (true) {
-    const { payload } = yield take(ActionTypes.LOGIN_USER.REQUEST);
+    const { payload, responseCallback } = yield take(ActionTypes.LOGIN_USER.REQUEST);
     yield put(loaderStart());
     try {
       const response = yield call(
@@ -44,25 +45,32 @@ function* login() {
       yield put(loaderStop());
       if (response) {
         console.log('login user', response?.data);
+        if (responseCallback) {
+          responseCallback(response.data)
+        }
         if (response) {
           if (response?.data?.user.isProfileCompleted == false) {
             yield put(saveTokenForLoginUser(response?.token));
+            yield put(saveRefereshTokenForLoginUser(response?.data?.refreshToken));
             NavService.navigate('CompleteProfile', { email: payload?.email });
             Util.DialogAlert(response.message, 'success');
-          } 
+          }
           else if (response?.data?.user?.role !== 'User' && !response?.data?.user?.isBussinessDetailCompleted) {
             yield put(saveTokenForLoginUser(response?.token));
+            yield put(saveRefereshTokenForLoginUser(response?.data?.refreshToken));
             NavService.navigate('BussinessDetail');
           }
-  
+
           // All conditions satisfied — proceed to login
           else {
             console.log('login response', response.data);
             yield put(saveTokenForLoginUser(response?.token));
             yield put(loginUser(response?.data?.user));
+            yield put(saveRefereshTokenForLoginUser(response?.data?.refreshToken));
+
             Util.DialogAlert('Login Successfully', 'success');
           }
-      
+
         }
       }
     } catch (error) {
@@ -98,10 +106,10 @@ function* signUp() {
             email: payload.email,
             password: payload.password,
             token: response?.data?.token,
-            role:payload.role,
-            otp:response?.data?.otp
+            role: payload.role,
+            otp: response?.data?.otp
           }
-        
+
           yield put(setOtpData(paramData));
           NavService.navigate('Otp', {
             data: paramData
@@ -146,6 +154,7 @@ function* oTPVerify() {
       console.log('responseresponse', response)
       if (response) {
         yield put(saveTokenForLoginUser(response?.token));
+        yield put(saveRefereshTokenForLoginUser(response?.refreshToken));
         Util.DialogAlert(response.message, 'success');
         NavService.navigate('CompleteProfile');
       } else {
@@ -173,7 +182,7 @@ function* resendOTP() {
       );
       yield put(loaderStop());
       if (response) {
-        console.log('responseresponseresponse',response)
+        console.log('responseresponseresponse', response)
         NavService.navigate('Otp', {
           otp: response.data.otp
         });
@@ -300,7 +309,7 @@ function* userLogout() {
         ApiSauce,
       );
       yield put(loaderStop());
-      if (response.status === 1) {
+      if (response) {
         console.log('responseoflogoutuser', response);
         if (
           payload?.user_social_token !== null &&

@@ -4,7 +4,8 @@ import ActionTypes, {
   USERLOGINTOKEN,
   CURRENTLOGINUSERINFO,
   SAVEEMAILFORUSER,
-  VERIFY_POPUP,SET_ROLE,SET_OTP_DATA
+  VERIFY_POPUP,SET_ROLE,SET_OTP_DATA,
+  REFERESHLOGINTOKEN
 } from '../../constants';
 import store from '../../index';
 
@@ -35,6 +36,14 @@ export function saveTokenForLoginUser(payload) {
     payload,
   };
 }
+
+export function saveRefereshTokenForLoginUser(payload) {
+  return {
+    type: REFERESHLOGINTOKEN,
+    payload,
+  };
+}
+
 export function saveEmailForUser(payload) {
   return {
     type: SAVEEMAILFORUSER,
@@ -88,10 +97,11 @@ export function saveUserForLoginUser(payload) {
     payload,
   };
 }
-export function loginCurrentUser(payload) {
+export function loginCurrentUser(payload,responseCallback) {
   return {
     type: ActionTypes.LOGIN_USER.REQUEST,
     payload,
+    responseCallback
   };
 }
 export function socialSignin(payload) {

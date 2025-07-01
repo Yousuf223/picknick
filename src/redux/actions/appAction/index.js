@@ -53,6 +53,13 @@ export function createPost(params, responseCallback) {
     responseCallback,
   };
 }
+export function fcmToken(params, responseCallback) {
+  return {
+    type: ActionTypes.REFERESH_TOKEN.REQUEST,
+    params,
+    responseCallback,
+  };
+}
 export function createRating(payload) {
   return {
     type: ActionTypes.CREATE_HEEDBACK.REQUEST,

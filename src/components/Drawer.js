@@ -76,8 +76,9 @@ class Drawer extends Component {
     const role = this.props?.role;
     const  user  = this?.props?.user;
         const  servicePrivider  = this?.props?.user;
+        const  refreshToken  = this?.props?.refereshToken;
 
-    console.log('useruser----',user)
+    console.log('useruser----',refreshToken)
     const RenderItem = ({ item, index }) => {
       const { title, icon, nav, screenName, screen } = item;
       return (
@@ -273,7 +274,7 @@ class Drawer extends Component {
         <TouchableOpacity  style={{
           height: 60, alignItems: 'center', borderTopRightRadius: 10, borderBottomRightRadius: 10,
           flexDirection: "row", justifyContent: 'center', marginBottom: "20%",backgroundColor:colors.white
-        }} onPress={() => this.props.logoutUser()} activeOpacity={0.8} >
+        }} onPress={() => this.props.logoutCurrentUser({refreshToken:refreshToken})} activeOpacity={0.8} >
           <Image source={appIcons.logout} style={{ width: 22, height: 22, resizeMode: "contain", marginRight: 20, tintColor: colors.white }} />
           <Text style={{ color: colors.primary, fontSize: size.large,fontWeight:'600' }}>Logout</Text>
         </TouchableOpacity>
@@ -303,10 +304,11 @@ class Drawer extends Component {
   }
 }
 
-function mapStateToProps({ authReducer: { user,role } }) {
+function mapStateToProps({ authReducer: { user,role ,refereshToken} }) {
   return {
     user: user,
-    role:role
+    role:role,
+    refereshToken: refereshToken
   };
 }
 

@@ -272,10 +272,10 @@ function* nearByUserList() {
     }
   }
 }
-function* SendRequest() {
+function* fcmToken() {
   while (true) {
     const {params, responseCallback} = yield take(
-      ActionTypes.SEND_REQUEST.REQUEST,
+      ActionTypes.REFERESH_TOKEN.REQUEST,
     );
     yield put(loaderStart());
     try {
@@ -288,8 +288,8 @@ function* SendRequest() {
         ApiSauce,
       );
       yield put(loaderStop());
-      if (response.status === 1) {
-        console.log('responseofsendRequest', response);
+      if (response) {
+        console.log('responseofsendRequest--', response);
         if (responseCallback) {
           responseCallback(true);
         }
@@ -741,7 +741,7 @@ export default function* root() {
   yield fork(getServices);
   yield fork(getServicesDetail);
   yield fork(nearByUserList);
-  yield fork(SendRequest);
+  yield fork(fcmToken);
   yield fork(SendRequestList);
   yield fork(receivedRequest);
   yield fork(acceptRejectRequest);

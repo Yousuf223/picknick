@@ -4,8 +4,8 @@ import AppBackground from '../../../../components/AppBackground';
 import CustomTextInput from '../../../../components/CustomTextInput';
 import { appIcons } from '../../../../assets';
 import styles from './styles';
-import { useDispatch } from 'react-redux';
-import { getDeviceToken, getServices, loaderStop, searchServices, searchServicesAction } from '../../../../redux/actions/appAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { fcmToken, getDeviceToken, getServices, loaderStop, searchServices, searchServicesAction } from '../../../../redux/actions/appAction';
 import { useIsFocused } from '@react-navigation/native';
 import ResortCard from '../../../../components/resortCard';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -24,8 +24,8 @@ const Home = () => {
     rating: ''
   });
   const [activeFilter, setActiveFilter] = useState(null);
+  useEffect( () => {
 
-  useEffect(() => {
     getDeviceToken()
     dispatch(loaderStop());
   }, []);
@@ -160,7 +160,7 @@ const Home = () => {
             </TouchableOpacity>
           </View>
           
-          {data.length > 0 ? (
+          {data?.length > 0 ? (
             <FlatList
               data={data}
               horizontal

@@ -7,7 +7,8 @@ import {
   USERLOGOUT,
   VERIFY_POPUP,
   SAVEEMAILFORUSER,
-  SET_ROLE,SET_OTP_DATA
+  SET_ROLE,SET_OTP_DATA,
+  REFERESHLOGINTOKEN
 } from '../../constants';
 
 const INITIAL_STATE = {
@@ -18,7 +19,8 @@ const INITIAL_STATE = {
   verificationPopUp: false,
   email: null,
   role: '',
-  otpData:null
+  otpData:null,
+  refereshToken:null
 };
 
 export default (states = INITIAL_STATE, action) => {
@@ -64,6 +66,11 @@ export default (states = INITIAL_STATE, action) => {
         ...states,
         userToken: action.payload,
       };
+          case REFERESHLOGINTOKEN:
+      return {
+        ...states,
+        refereshToken: action.payload,
+      };
     case VERIFY_POPUP:
       return {
         ...states,
@@ -76,6 +83,7 @@ export default (states = INITIAL_STATE, action) => {
         userToken: null,
         isUserLogin: false,
         currentUserProfile: {},
+        refereshToken:null
       };
     default:
       return states;

@@ -22,7 +22,7 @@ export const BottomTabs = () => {
       initialRouteName={'BottomTabs'}>
         <Tab.Screen name="Home" component={Home} />
         <Tab.Screen name="Favorite" component={Favorite} />
-          <Tab.Screen name="Messages" component={Messages} />
+          {/* <Tab.Screen name="Messages" component={Messages} /> */}
         <Tab.Screen name="Profile" component={Profile} />
         
     </Tab.Navigator>

@@ -8,7 +8,7 @@ import CustomTextInput from '../../../components/CustomTextInput';
 import Toast from 'react-native-toast-message';
 import NavService from '../../../helpers/NavService';
 import {loginCurrentUser, loginUser} from '../../../redux/actions/authAction';
-import {getDeviceToken} from '../../../redux/actions/appAction';
+import {fcmToken, getDeviceToken} from '../../../redux/actions/appAction';
 import {appIcons, appLogos} from '../../../assets/index';
 import {colors} from '../../../utils';
 import styles from './styles';
@@ -49,7 +49,16 @@ const Login = ({loginCurrentUser, location, navigation}) => {
         password:password,
         role:role
       };
-      dispatch(loginCurrentUser(payload));
+      const getFcmToken = await getDeviceToken();
+      dispatch(loginCurrentUser(payload,(response)=>{
+        console.log('responseLoign',response?.refreshToken)
+        console.log('getFcmToken', getFcmToken)
+        const loginPayload={
+          fcmToken : getFcmToken,
+          refreshToken: response?.refreshToken
+        }
+        dispatch(fcmToken(loginPayload))
+      }));
     }
   };
   const now = new Date();

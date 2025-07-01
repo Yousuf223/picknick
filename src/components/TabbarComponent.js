@@ -91,7 +91,7 @@ const TabBar = ({ state, navigation }) => {
                   isUpdated,
                 });
               }
-              if (route.name === 'Messages') navigation.navigate('Messages');
+              // if (route.name === 'Messages') navigation.navigate('Messages');
               if (route.name === 'Profile') navigation.navigate('Profile');
               if (route.name === 'Favorite') navigation.navigate('Favorite');
             };
@@ -101,7 +101,7 @@ const TabBar = ({ state, navigation }) => {
             if (route.name === 'Favorite') imageSrc = appIcons.heart, title = 'Favorite';
             if (route.name === 'Home') imageSrc = appIcons.home, title = 'Home';
             if (route.name === 'Profile') imageSrc = appIcons.user, title = 'Profile';
-            if (route.name === 'Messages') imageSrc = appIcons.calendar, title = 'Messages';
+            // if (route.name === 'Messages') imageSrc = appIcons.calendar, title = 'Messages';
 
             return (
               <View style={{ paddingHorizontal: 15 }} key={route.name}>

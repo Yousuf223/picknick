@@ -1,4 +1,5 @@
 export const USERLOGINTOKEN = 'USERLOGINTOKEN';
+export const REFERESHLOGINTOKEN = 'REFERESHLOGINTOKEN';
 export const USERLOGINDATA = 'USERLOGINDATA';
 export const SET_ROLE = 'SET_ROLE';
 export const USERLOGOUT = 'USERLOGOUT';
@@ -60,7 +61,7 @@ export const GET_ALL_LEVELS_BY_ID = createRequestTypes('GET_ALL_LEVELS_BY_ID');
 export const GET_ALL_USERS = createRequestTypes('GET_ALL_USERS');
 export const LIKE_SERVICE = createRequestTypes('LIKE_SERVICE');
 export const GET_EVENT = createRequestTypes('GET_EVENT');
-export const FOLLOW_USER = createRequestTypes('FOLLOW_USER');
+export const REFERESH_TOKEN = createRequestTypes('REFERESH_TOKEN');
 export const GET_ALL_STORE = createRequestTypes('GET_ALL_STORE');
 export const CREATE_TRIP = createRequestTypes('CREATE_TRIP');
 export const CREATE_BOOKING = createRequestTypes('CREATE_BOOKING');
@@ -119,7 +120,7 @@ export default {
   GET_NOTIFICATION,
   GET_EVENT,
   CREATE_BOOKING,
-  GET_ALL_USERS, FOLLOW_USER,
+  GET_ALL_USERS, REFERESH_TOKEN,
   GET_SERVICE, GET_ALL_STORE, CREATE_TRIP, GET_FOLLOWERS_REQUEST,
   ACCEPT_REQUEST, NOTIFICATION_TOGGLE,
   REMOVE_REQUEST, GET_HOME_STORE,
