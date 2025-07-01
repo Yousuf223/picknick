@@ -23,12 +23,10 @@ const Home = () => {
   useEffect(() => {
     if (isFocused) {
       dispatch(getEventList(response => {
-        console.log('Fetched event list:', response);
         setData(response);
       }));
     }
   }, [isFocused]);
-console.log('userDatauserData',userData?.data)
   return (
     <AppBackground
       menu
@@ -54,8 +52,8 @@ console.log('userDatauserData',userData?.data)
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{ flexGrow: 1, paddingBottom: '40%' }}
           renderItem={({ item }) => (
-            <Card userImage={userData?.data?.profileImage ? { uri: userData?.data?.profileImage } : appIcons.userPlaceholder}
-              fullName={userData?.data?.firstName + ' ' + userData?.data?.lastName}
+            <Card userImage={item?.userId?.profileImage ? { uri: item?.userId?.profileImage } : appIcons.userPlaceholder}
+              fullName={item?.userId?.firstName + ' ' + item?.userId?.lastName}
               image={item?.media?.length > 0 && { uri: item?.media[0]?.mediaPath }}
               price={item?.price} title={item?.name} item={item} />
           )}

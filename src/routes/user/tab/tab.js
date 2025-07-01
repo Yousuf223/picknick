@@ -5,6 +5,7 @@ import {colors} from '../../../utils';
 import Home from '../../../screens/Main/user/Home/Home';
 import Profile from '../../../screens/Main/user/Profile/Profie';
 import Favorite from '../../../screens/Main/user/favorite/favorite';
+import Messages from '../../../screens/Main/user/Message/Message';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,6 +22,7 @@ export const BottomTabs = () => {
       initialRouteName={'BottomTabs'}>
         <Tab.Screen name="Home" component={Home} />
         <Tab.Screen name="Favorite" component={Favorite} />
+          <Tab.Screen name="Messages" component={Messages} />
         <Tab.Screen name="Profile" component={Profile} />
         
     </Tab.Navigator>

@@ -20,12 +20,12 @@ import { colors } from '../../../../utils';
 import { useSelector } from 'react-redux';
 
 const Profile = () => {
-    const userData = useSelector((state) => state?.authReducer?.user)
+    const userData = useSelector((state) => state?.authReducer?.user?.listing)
     console.log('userDatauserData', userData)
     const [search, setSearch] = useState('');
     const [data, setData] = useState([
-        { title: 'First Name', subTitle: userData?.firstName },
-        { title: 'Last Name', subTitle: userData?.lastName },
+        { title: 'First Name', subTitle: userData?.userId?.firstName },
+        { title: 'Last Name', subTitle: userData?.userId?.lastName },
         { title: 'Gender', subTitle: userData?.gender },
         // { title: 'Phone', subTitle: userData?.contactNumber }
     ])
@@ -39,7 +39,7 @@ const Profile = () => {
             appLogo={false}
             onVideoPress={() => togglePopUp()}
             marginHorizontal={false}>
-            <Image style={styles.userImage} source={userData?.profilePicture ? { uri: userData?.profilePicture } : appIcons.userPlaceholder} />
+            <Image style={styles.userImage} source={userData?.userId?.profileImage ? { uri: userData?.userId?.profileImage } : appIcons.userPlaceholder} />
             <TouchableOpacity style={{
                 width: 46, height: 40, alignSelf: "center", bottom: 50, backgroundColor: colors.white, justifyContent: 'center',
                 alignItems: 'center', borderRadius: 10, right: -53,borderWidth:1,borderColor:colors.primary

@@ -14,6 +14,7 @@ import { BASE_URL } from '../../../../config/WebService';
 import { colors } from '../../../../utils';
 import styles from './syles';
 import CustomButton from '../../../../components/CustomButton';
+import NavService from '../../../../helpers/NavService';
 
 const MyBookings = () => {
     const dispatch = useDispatch();
@@ -57,7 +58,7 @@ const MyBookings = () => {
     };
 
     const BookingCard = ({ item }) => {
-        console.log('itemitem', item);
+        console.log('itemitem----', item);
         return (
             <View style={styles.bookingCard}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
@@ -74,7 +75,9 @@ const MyBookings = () => {
                     <Text style={[styles.bookingDetails, { flex: 1, textAlign: 'right' }]}>End Date: {moment(item.endDate).format('MM-DD-YYYY')}</Text>
                 </View>
                 {item?.status == 'ACCEPTED' && <CustomButton buttonStyle={styles.buttonStyle}  title='Pay Now' />}
-                {item?.status == 'COMPLETED' && <CustomButton buttonStyle={styles.buttonStyle} title='Rate' />}
+                {item?.status == 'COMPLETED' && !item?.isRated  && <CustomButton buttonStyle={styles.buttonStyle} onPress={()=>NavService.navigate('RatingScreen',{
+                    item
+                })} title='Rate' />}
             </View>
         );
     };

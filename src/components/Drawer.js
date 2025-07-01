@@ -75,7 +75,9 @@ class Drawer extends Component {
     const { modalVisible, profileImage } = this.state;
     const role = this.props?.role;
     const  user  = this?.props?.user;
-    console.log('useruser',user)
+        const  servicePrivider  = this?.props?.user;
+
+    console.log('useruser----',user)
     const RenderItem = ({ item, index }) => {
       const { title, icon, nav, screenName, screen } = item;
       return (
@@ -194,10 +196,10 @@ class Drawer extends Component {
               size={90}
               innerAsset={profileImage == null ? true : false}
               imageUri={
-                profileImage == null && user?.data?.profileImage == null
+                profileImage == null && user?.userId?.profileImage == null
                   ? appIcons.userPlaceholder
-                  : user?.data?.profileImage !== '' && profileImage == null
-                    ? { uri: user?.data?.profileImage }
+                  : user?.userId?.profileImage !== '' && profileImage == null
+                    ? { uri: user?.userId?.profileImage }
                     : profileImage?.path
               }
               darwerImg
@@ -223,7 +225,7 @@ class Drawer extends Component {
                 textTransform: 'capitalize',
                 fontWeight: '600'
               }}>
-              {user?.data?.firstName} {user?.data?.lastName}
+              {role == 'Vendor' ? servicePrivider.firstName : user?.userId?.firstName} {role == 'Vendor' ? servicePrivider.lastName : user?.userId?.lastName}
             </Text>
             <Text
               numberOfLines={1}
@@ -233,7 +235,7 @@ class Drawer extends Component {
                 // fontFamily: family.Oswald_Regular,
                 marginTop: 3,
               }}>
-              {user?.data?.email}
+              {role === 'Vendor' ? servicePrivider.email : user?.userId?.email}
 
             </Text>
           </View>

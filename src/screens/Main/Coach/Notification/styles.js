@@ -1,6 +1,7 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import appStyles from "../../../appStyles";
 import { colors } from "../../../../utils";
+const {width, height} = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
     cont: {
@@ -16,9 +17,11 @@ const styles = StyleSheet.create({
         ...appStyles.w100,
         paddingHorizontal: 10,
         paddingVertical: 10,
-        backgroundColor: colors.lightBlack,
+        backgroundColor: colors.white,
         marginVertical: 5,
         borderRadius: 8,
+        borderBottomWidth:1,
+        borderColor:colors.lightGray1
     },
 
     profileImage: {
@@ -45,7 +48,7 @@ const styles = StyleSheet.create({
 
     notiheader: {
         ...appStyles.font16,
-        color: colors.white,
+        color: colors.black,
         ...appStyles.family_Oswald_Medium
     },
 
@@ -65,23 +68,15 @@ const styles = StyleSheet.create({
         ...appStyles.font14,
         ...appStyles.family_Oswald_Regular
     },
-
-    btnCont: {
-        width: "80%",
-        ...appStyles.justifySpaceBetween,
-        marginTop: 10,
-        alignSelf: "flex-end",
-        alignItems:"flex-end"
-    },
-
-    joinBtn: {
-        position: "absolute",
-        width: "40%",
-        height: 40,
-        borderRadius: 5,
-        bottom: 10,
-        right: 2
-    },
+  listEmpty: {
+    flex: 1,
+    alignItems: 'center',
+    marginTop: height * 0.4,
+  },
+  textListEmpty: {
+    color: colors.black,
+    fontSize: 12,
+  },
 });
 
 export default styles;

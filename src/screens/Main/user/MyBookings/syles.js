@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     borderColor:colors.lightGray1
   },
   bookingTitle: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: '500',
     color: '#333',
   },

@@ -142,7 +142,7 @@ function* likeList() {
 
 function* getNotification() {
   while (true) {
-    const {params, responseCallback} = yield take(
+    const {responseCallback} = yield take(
       ActionTypes.GET_NOTIFICATION.REQUEST,
     );
     yield put(loaderStart());
@@ -707,34 +707,30 @@ function* createBooking() {
   }
 }
 
-function* createHeedback() {
+function* createRating() {
   while (true) {
-    const {params, responseCallback} = yield take(
-      ActionTypes.CREATE_HEEDBACK.REQUEST,
-    );
+    const { payload } = yield take(ActionTypes.CREATE_HEEDBACK.REQUEST);
+    console.log('payloadpayload',payload)
     yield put(loaderStart());
     try {
       const response = yield call(
         callRequest,
         CREATE_HEEDBACK,
-        params,
+        payload,
         '',
         {},
         ApiSauce,
       );
       yield put(loaderStop());
-      console.log('responseresponse', response);
       if (response) {
-        NavService.navigate('FeedBackSend');
-        Util.DialogAlert(response.message, 'success');
-        console.log('responseofsendRequest', response);
-      } else {
-        console.log('errrorr-logged');
+        console.log('login user', response?.data);
+           Util.DialogAlert(response.message, 'success');
+           NavService.goBack()
       }
     } catch (error) {
-      console.log('errorofsendREquest', error);
-      Util.DialogAlert(error?.error);
+      console.log('-----errorerror----', error);
       yield put(loaderStop());
+      Util.DialogAlert(error.message);
     }
   }
 }
@@ -758,7 +754,7 @@ export default function* root() {
   yield fork(getPrivacy);
   yield fork(getNotificationOnOff);
   yield fork(uploadImage);
-  yield fork(createHeedback);
+  yield fork(createRating);
   yield fork(getAllLevelsById);
   yield fork(getNotification);
   yield fork(createBooking)

@@ -136,7 +136,7 @@ export const LIKES_LIST = {
   type: REQUEST_TYPE.GET,
 };
 export const GET_NOTIFICATION = {
-  route: 'users/notifications',
+  route: 'auth/notifications',
   access_token_required: true,
   type: REQUEST_TYPE.GET,
 };
@@ -186,7 +186,7 @@ export const UPLOAD_image = {
   type: REQUEST_TYPE.POST,
 };
 export const CREATE_HEEDBACK = {
-  route: 'feedbacks',
+  route: 'user/submit-rating',
   access_token_required: true,
   type: REQUEST_TYPE.POST,
 };

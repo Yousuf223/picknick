@@ -1,6 +1,8 @@
 
 import store from '../../index';
 import ActionTypes, { ALL_EVENT } from '../../constants';
+import messaging from '@react-native-firebase/messaging';
+import { getAllServices, searchServices } from '../../../config/api';
 function dispatch(action) {
   store.dispatch(action);
 }
@@ -32,22 +34,29 @@ export function saveCurrentUserLocation(location) {
     payload: location,
   };
 }
-// export const getDeviceToken = async () => {
-//   try {
-//     // await messaging().registerDeviceForRemoteMessages();
-//     const token = await messaging().getToken();
-//     if (token) return token;
-//     else return '';
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+export const getDeviceToken = async () => {
+  try {
+    // await messaging().registerDeviceForRemoteMessages();
+    const token = await messaging().getToken();
+    console.log('Check FCM',token)
+    if (token) return token;
+    else return '';
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export function createPost(params, responseCallback) {
   return {
     type: ActionTypes.CREATE_POST.REQUEST,
     params,
     responseCallback,
+  };
+}
+export function createRating(payload) {
+  return {
+    type: ActionTypes.CREATE_HEEDBACK.REQUEST,
+    payload,
   };
 }
 export function createBooking(params, responseCallback) {
@@ -83,10 +92,9 @@ export function likeService(params, responseCallback) {
     responseCallback,
   };
 }
-export function getNotification(params, responseCallback) {
+export function getNotification(responseCallback) {
   return {
     type: ActionTypes.GET_NOTIFICATION.REQUEST,
-    params,
     responseCallback,
   };
 }
@@ -216,13 +224,7 @@ export function uploadImage(params, responseCallback) {
     responseCallback,
   };
 }
-export function createHeedback(params, responseCallback) {
-  return {
-    type: ActionTypes.CREATE_HEEDBACK.REQUEST,
-    params,
-    responseCallback,
-  };
-}
+
 
 export function chatList(params, responseCallback) {
   return {
@@ -295,3 +297,32 @@ export function addStoryData(storyData) {
   dispatch({type: 'STORY_DATA', payload: storyData});
 }
 
+
+
+// src/redux/actions/appAction.js
+
+export const getServices = (callback) => async (dispatch) => {
+  try {
+    dispatch({ type: 'LOADER_START' });
+    const response = await getAllServices();
+    callback(response);
+    dispatch({ type: 'GET_SERVICES_SUCCESS', payload: response });
+  } catch (error) {
+    dispatch({ type: 'GET_SERVICES_FAIL', payload: error.message });
+  } finally {
+    dispatch({ type: 'LOADER_STOP' });
+  }
+};
+
+export const searchServicesAction = (params, callback) => async (dispatch) => {
+  try {
+    dispatch({ type: 'LOADER_START' });
+    const response = await searchServices(params);
+    callback(response);
+    dispatch({ type: 'SEARCH_SERVICES_SUCCESS', payload: response });
+  } catch (error) {
+    dispatch({ type: 'SEARCH_SERVICES_FAIL', payload: error.message });
+  } finally {
+    dispatch({ type: 'LOADER_STOP' });
+  }
+};

@@ -361,8 +361,8 @@ const CompleteProfile = ({ route }) => {
             <CustomButton
               buttonStyle={styles.buttonStyle}
               title="Submit"
-              onPress={() =>     NavService.navigate('BussinessDetail')}
-            // onPress={role == 'User' ? onSubmit : onVendorSubmit}
+              // onPress={() =>     NavService.navigate('BussinessDetail')}
+            onPress={()=>onSubmit()}
             />
           </View>
         </ScrollView>

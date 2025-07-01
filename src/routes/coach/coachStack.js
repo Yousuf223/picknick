@@ -8,6 +8,7 @@ import Home from '../../screens/Main/Coach/Home/Home';
 import Profile from '../../screens/Main/Coach/Profile/Proflie';
 import CreatePost from '../../screens/Main/Coach/CreatePost';
 import Bookings from '../../screens/Main/Coach/Bookings/Bookings';
+import Notification from '../../screens/Main/Coach/Notification';
 
 
 
@@ -30,7 +31,8 @@ const CoachNavigation = ({ initialRoute }) => {
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="CreatePost" component={CreatePost} />
       <Stack.Screen name="Bookings" component={Bookings} />
-      
+            <Stack.Screen name="Notification" component={Notification} />
+
       
     </Stack.Navigator>
   );

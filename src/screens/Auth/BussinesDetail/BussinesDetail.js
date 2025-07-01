@@ -22,10 +22,6 @@ import {
 import ActionSheet from 'react-native-actionsheet';
 import { colors } from '../../../utils';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import moment from 'moment';
-import NavService from '../../../helpers/NavService';
-import { cities, states } from '../../../utils/dummyData';
-import ActionSheetComponent from '../../../components/ActionSheetComponent';
 import AppBackground from '../../../components/AppBackground';
 import GooglePlaceAutocomplete from '../../../components/GooglePlaceAutocomplete';
 import axios from 'axios';

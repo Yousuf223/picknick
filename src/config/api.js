@@ -1,37 +1,48 @@
+// src/services/api.js
+import axios from 'axios';
 import store from '../redux';
-import { BASE_URL } from "./WebService";
+import { BASE_URL } from './WebService';
 
-export const addProfilePicture = async (payload) => {
-    const token = store?.getState()?.authReducer?.userToken;
+const api = axios.create({
+  baseURL: BASE_URL, // Your base API URL
+});
 
-    if (!token) {
-        console.error('No token found');
-        return;
+// Add request interceptor to include token
+api.interceptors.request.use(
+  (config) => {
+    const token = store.getState().authReducer.userToken; // Get token from Redux store
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
-    try {
-        // const formData = new FormData();
-        // formData.append('profile_picture', payload); // Assuming payload is a file or blob
+export const searchServices = async (params) => {
+  try {
+    const response = await api.get('/user/search', {
+      params: {
+        name: params.name || '',
+        price: params.price || '',
+        rating: params.rating || '',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Search error:', error);
+    throw error;
+  }
+};
 
-        const response = await fetch(`https://gqtpw5tc-9900.inc1.devtunnels.ms/api/v1/users/me/upload-profile-picture`, {
-            method: 'POST',
-            body: payload,
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token}`,
-                // Note: FormData sets the Content-Type header automatically
-            },
-        });
-
-        const result = await response.json();
-        if (response.ok) {
-            return result; // Returning the result if successful
-        } else {
-            console.error('Failed to upload profile picture:', result);
-            return null; // Or handle as needed
-        }
-    } catch (error) {
-        console.error('Upload failed:', error);
-        return null; // Or handle as needed
-    }
-}
+export const getAllServices = async () => {
+  try {
+    const response = await api.get('/user/listings');
+    return response.data;
+  } catch (error) {
+    console.error('Get services error:', error);
+    throw error;
+  }
+};
