@@ -13,14 +13,16 @@ import { BASE_URL } from '../../../../config/WebService';
 
 const ServiceDetail = ({ route }) => {
   const dispatch = useDispatch();
-   const token = useSelector((state) => state.authReducer.userToken);
+  const token = useSelector((state) => state.authReducer.userToken);
   const { id } = route.params
   console.log('-sadsad', id)
   const [data, setData] = useState([
   ]);
   const [detail, setDetail] = useState(null)
-  const [like,setLike] = useState(false)
-  const [modalVisible,setModalVisible] = useState(false)
+  const [like, setLike] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false)
+      const socket = useSelector(state => state.appReducer.socket);
+
   useEffect(() => {
     dispatch(
       getServicesDetail(id, response => {
@@ -31,26 +33,26 @@ const ServiceDetail = ({ route }) => {
     );
   }, [])
   let a = 2
-  console.log( 'type of', typeof a)
+  console.log('type of', typeof a)
   const onLike = async () => {
     try {
       const response = await axios.patch(
         `${BASE_URL}user/fav-unfav/${id}`,
-        {}, 
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`
           }
         }
       );
-  console.log('responseresponse',response?.data?.data)
+      console.log('responseresponse', response?.data?.data)
       setLike(response?.data?.data?.isFavorite);
     } catch (error) {
       console.error('Error liking the item:', error);
     }
   };
-  
-  console.log('idid',id)
+
+  console.log('idid', id)
   const renderCard = ({ item }) => {
     console.log('itemitem', item)
     return (
@@ -63,7 +65,11 @@ const ServiceDetail = ({ route }) => {
       </View>
     );
   };
-  console.log(detail,'detaildetail')
+  console.log(socket, 'detaildetail')
+      const joinRoom = (targetUserId) => {
+        socket.emit("join-room", { userId: detail?.listing?.userId?._id });
+        NavService.navigate('Chat', { userId: targetUserId, userDetail: detail?.listing?.userId });
+    };
   return (
     <>
       <ScrollView style={styles.container}>
@@ -84,16 +90,16 @@ const ServiceDetail = ({ route }) => {
           </View>
           <View style={styles.iconContainer}>
             <TouchableOpacity onPress={() => onLike()} style={styles.iconButton}>
-              {like ? <Text style={styles.iconText}>❤️</Text> :               <Image style={{width:20,height:20,resizeMode:'contain',tintColor:'red'}} source={appIcons.heart} />}
+              {like ? <Text style={styles.iconText}>❤️</Text> : <Image style={{ width: 20, height: 20, resizeMode: 'contain', tintColor: 'red' }} source={appIcons.heart} />}
 
-             
+
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.userRow}>
-          <Image style={styles.userImage} source={{uri:detail?.listing?.userId?.profileImage}} />
+        <TouchableOpacity onPress={()=> joinRoom()} style={styles.userRow}>
+          <Image style={styles.userImage} source={{ uri: detail?.listing?.userId?.profileImage }} />
           <Text>{detail?.listing?.userId?.lastName}</Text>
-        </View>
+        </TouchableOpacity>
         {/* Content Section */}
         <View style={styles.content}>
           <Text style={styles.title}>{detail?.listing?.name}</Text>
@@ -126,19 +132,19 @@ const ServiceDetail = ({ route }) => {
 
 
       </ScrollView>
- 
+
       <View style={{ alignSelf: 'center', position: 'absolute', bottom: '6%' }}>
-        <CustomButton onPress={()=>setModalVisible(true)} title={'Book Now'} />
+        <CustomButton onPress={() => setModalVisible(true)} title={'Book Now'} />
       </View>
       <CreateBooking
-          isModalVisible={modalVisible}
-          togglePopup={() =>
-            setModalVisible(false)
-          }
-          setModalVisible={setModalVisible}
-          SubTitle={'Please select the start and end dates and times for your booking'}
-          id={id}
-        />
+        isModalVisible={modalVisible}
+        togglePopup={() =>
+          setModalVisible(false)
+        }
+        setModalVisible={setModalVisible}
+        SubTitle={'Please select the start and end dates and times for your booking'}
+        id={id}
+      />
     </>
   );
 };

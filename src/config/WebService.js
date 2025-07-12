@@ -3,9 +3,9 @@ import ApiSauce from '../services/ApiSauce';
 import store from '../redux';
 
 // export const BASE_URL = 'https://sn6jm18m-8000.inc1.devtunnels.ms/api/v1/';
-export const BASE_URL = 'https://hfvnq53r-5000.usw3.devtunnels.ms/api/v1';
+export const BASE_URL = 'https://sn6jm18m-5000.inc1.devtunnels.ms/api/v1/';
 export const ASSETS_URL = 'https://3239dgd1-8000.inc1.devtunnels.ms/';
-export const WEB_SOCKET_URL = 'https://host2.appsstaging.com:3018/';
+export const WEB_SOCKET_URL = 'https://sn6jm18m-5000.inc1.devtunnels.ms/'
 export const GOOGLE_MAPS_URL =
   'https://www.google.com/maps/search/?api=1&query=';
 // export const BASE_URL = "http://10.0.4.71:3018/api/v1/"; //local
@@ -189,6 +189,16 @@ export const CREATE_HEEDBACK = {
   route: 'user/submit-rating',
   access_token_required: true,
   type: REQUEST_TYPE.POST,
+};
+export const GET_CHAT_LIST = {
+  route: 'chat/list',
+  access_token_required: true,
+  type: REQUEST_TYPE.GET,
+};
+export const GET_MESSAGES = {
+  route: 'chat/room-messages',
+  access_token_required: true,
+  type: REQUEST_TYPE.GET,
 };
 export const CREATE_BOOKING = {
   route: 'user/booking',

@@ -111,7 +111,7 @@ function AppBackground({
               style={{
                 color: colors.black,
                 fontSize: size.normal,
-                marginTop: Platform.OS === 'ios' ? 10 : 0,
+                marginTop: Platform.OS === 'ios' ? 10 : 10,
               
               }}>
               {title}

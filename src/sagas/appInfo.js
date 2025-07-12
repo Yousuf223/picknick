@@ -27,6 +27,8 @@ import API_URL, {
   LIKES_LIST,
   CREATE_BOOKING,
   GET_BOOKINGS,
+  GET_MESSAGES,
+  GET_CHAT_LIST,
 } from '../config/WebService';
 import ApiSauce from '../services/ApiSauce';
 import NavService from '../helpers/NavService';
@@ -194,7 +196,7 @@ function* getServicesDetail() {
       );
       yield put(loaderStop());
       if (response) {
-        yield put(loginUser(response?.data));
+        // yield put(loginUser(response?.data));
         if (responseCallback) {
           responseCallback(response?.data);
         }
@@ -457,7 +459,34 @@ function* myPost() {
     }
   }
 }
-
+function* getChatMessages() {
+  while (true) {
+    const { params, responseCallback } = yield take(ActionTypes.GET_MESSAGES.REQUEST);
+    yield put(loaderStart());
+    try {
+      const response = yield call(
+        callRequest,
+        GET_MESSAGES, 
+        '',
+        params,
+        {},
+        ApiSauce,
+      );
+      yield put(loaderStop());
+      if (response) {
+        console.log('------ddfsdfsff',response)
+        if (responseCallback) {
+          responseCallback(response?.data);
+        }
+      } else {
+        console.log('errrorr-logged');
+      }
+    } catch (error) {
+      responseCallback([]);
+      yield put(loaderStop());
+    }
+  }
+}
 function* likeService() {
   while (true) {
     const {params, responseCallback} = yield take(
@@ -734,7 +763,36 @@ function* createRating() {
     }
   }
 }
-
+function* getChatList() {
+  while (true) {
+    const { params, responseCallback } = yield take(ActionTypes.GET_CHAT_LIST.REQUEST);
+    yield put(loaderStart());
+    try {
+      const response = yield call(
+        callRequest,
+        GET_CHAT_LIST,
+        null,
+        '',
+        {},
+        ApiSauce,
+      );
+      yield put(loaderStop());
+      if (response) {
+        console.log('----responseresponse', response?.data);
+        if (responseCallback) {
+          responseCallback(response?.data);
+        }
+      } else {
+        console.log('errrorr-logged');
+      }
+    } catch (error) {
+      responseCallback([]);
+      console.log('errorofgetpostlist', error);
+      // Util.DialogAlert(error?.message);
+      yield put(loaderStop());
+    }
+  }
+}
 
 export default function* root() {
   yield fork(getEventList);
@@ -758,4 +816,6 @@ export default function* root() {
   yield fork(getAllLevelsById);
   yield fork(getNotification);
   yield fork(createBooking)
+  yield fork(getChatMessages)
+  yield fork(getChatList)
 }

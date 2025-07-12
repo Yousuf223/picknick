@@ -99,6 +99,8 @@ export const GET_NOTIFICATION = createRequestTypes('GET_NOTIFICATION');
 export const UPLOAD_IMAGE = createRequestTypes('UPLOAD_IMAGE')
 export const CREATE_HEEDBACK = createRequestTypes('CREATE_HEEDBACK')
 export const SERVICE_DETAIL = createRequestTypes('SERVICE_DETAIL')
+export const GET_CHAT_LIST = createRequestTypes('GET_CHAT_LIST')
+export const GET_MESSAGES = createRequestTypes('GET_MESSAGES')
 export default {
   LOADING_STATE,
   SOCIAL_SIGNUP_USER,
@@ -152,5 +154,7 @@ export default {
   GET_NOTIFICATION_ONOFF,
   UPLOAD_IMAGE,
   CREATE_HEEDBACK  ,
-  SERVICE_DETAIL
+  SERVICE_DETAIL,
+  GET_MESSAGES,
+  GET_CHAT_LIST
 };

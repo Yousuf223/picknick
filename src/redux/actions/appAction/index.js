@@ -233,14 +233,20 @@ export function uploadImage(params, responseCallback) {
 }
 
 
-export function chatList(params, responseCallback) {
+export function getChatList(responseCallback) {
   return {
-    type: ActionTypes.CHAT_LIST.REQUEST,
-    params,
+    type: ActionTypes.GET_CHAT_LIST.REQUEST,
     responseCallback,
   };
 }
+export function getChatMessages(params,responseCallback) {
+  return {
+    type: ActionTypes.GET_MESSAGES.REQUEST,
+    params,
+    responseCallback
 
+  };
+}
 
 export function getPrivacy(params, responseCallback) {
   return {
@@ -294,9 +300,9 @@ export function saveRefForCurrentVisibleView(viewIndex) {
     payload: viewIndex,
   };
 }
-// export function saveScoket(socket) {
-//   dispatch({type: 'SAVE_SOCKET', payload: socket});
-// }
+export function saveScoket(socket) {
+  dispatch({type: 'SAVE_SOCKET', payload: socket});
+}
 export function saveGlobalSocket(socket) {
   dispatch({type: 'SAVE_SOCKET', payload: socket});
 }

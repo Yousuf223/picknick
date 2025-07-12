@@ -62,7 +62,6 @@ const Home = () => {
    const fetchServices = () => {
     dispatch(
       getServices(response => {
-        console.log('responseresponse',response)
         setData(response?.data);
       })
     );
@@ -133,7 +132,7 @@ const Home = () => {
   return (
     <AppBackground
       menu
-      title={'Discover'}
+      title={'Home'}
       Cart={true}
       appLogo={false}
       notification

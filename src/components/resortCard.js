@@ -4,7 +4,6 @@ import { appIcons } from '../assets';
 import NavService from '../helpers/NavService';
 
 const ResortCard = ({item}) => {
-  console.log('itemitem',item)
   return (
     <TouchableOpacity activeOpacity={0.8} onPress={()=>NavService.navigate('ServiceDetail',{id:item?._id})} style={styles.card}>
       <Image

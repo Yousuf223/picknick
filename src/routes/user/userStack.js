@@ -11,6 +11,7 @@ import MyBookings from '../../screens/Main/user/MyBookings/MyBookings';
 import RatingScreen from '../../screens/Main/user/Rating/Rating';
 import Messages from '../../screens/Main/user/Message/Message';
 import Notification from '../../screens/Main/user/Notification';
+import Chat from '../../screens/Main/user/Chat';
 
 
 
@@ -37,8 +38,10 @@ const UserNavigation = ({ initialRoute }) => {
       <Stack.Screen name="Favorite" component={Favorite} />
       <Stack.Screen name="MyBookings" component={MyBookings} />
       <Stack.Screen name="RatingScreen" component={RatingScreen} />
-      {/* <Stack.Screen name="Messages" component={Messages} /> */}
+      <Stack.Screen name="Messages" component={Messages} />
       <Stack.Screen name="Notification" component={Notification} />
+            <Stack.Screen name="Chat" component={Chat} />
+
 
 
     </Stack.Navigator>
